@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="h-full">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Speaking | Gen Alpha</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts: Cairo, Kufam, Silkscreen, Space Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800;900&family=Kufam:wght@700;800;900&family=Silkscreen:wght@400;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cream: '#FAF7F2',
+            navy: '#0E1726',
+            orange: '#FF5226',
+            cyan: '#00E5FF',
+            yellow: '#FFE800',
+            lime: '#10B981',
+            softRed: '#FF4D4D',
+          },
+          fontFamily: {
+            arabic: ['Kufam', 'Cairo', 'sans-serif'],
+            cairo: ['Cairo', 'sans-serif'],
+            pixel: ['Silkscreen', 'monospace'],
+            mono: ['Space Mono', 'monospace'],
+          },
+          boxShadow: {
+            'brutal-sm': '2px 2px 0px #0E1726',
+            'brutal': '4px 4px 0px #0E1726',
+            'brutal-lg': '5px 5px 0px #0E1726',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #FAF7F2;
+      color: #0E1726;
+      font-family: 'Cairo', sans-serif;
+      overflow-x: hidden;
+      background-image: radial-gradient(#0E1726 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+
+    .btn-brutal {
+      transition: all 0.1s ease-in-out;
+    }
+    .btn-brutal:active {
+      transform: translate(3px, 3px);
+      box-shadow: 1px 1px 0px #0E1726 !important;
+    }
+
+    .option-card {
+      transition: all 0.15s ease;
+    }
+    .option-card:hover {
+      transform: translateY(-2px);
+    }
+
+    /* Star Pop Animation */
+    @keyframes starPop {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.4) rotate(12deg); }
+      100% { transform: scale(1); }
+    }
+    .star-earned {
+      animation: starPop 0.4s ease-in-out forwards;
+      color: #FFE800 !important;
+      text-shadow: 2px 2px 0px #0E1726;
+    }
+  </style>
+  <script src="app.js"></script>
+
+  <style>
+    .stage { animation: stageIn .35s ease-out both; }
+    @keyframes stageIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+    .gstar { font-size: 26px; line-height: 1; color: #CBD5E1; text-shadow: 1px 1px 0 #0E1726; display: inline-block; }
+    .gstar.on { color: #FFE800; }
+    .gstar.pop { animation: starPop .6s cubic-bezier(.2,1.8,.4,1); }
+    @keyframes starPop { 0% { transform: scale(0) rotate(-90deg); } 70% { transform: scale(1.6) rotate(15deg); } 100% { transform: scale(1) rotate(0); } }
+    .sent { transition: background .2s; padding: 1px 3px; border-radius: 3px; }
+    .sent.on { background: #FFE800; box-shadow: 0 0 0 2px #0E1726; }
+    :where(.wchip) { background: #fff; }
+    .wchip { border: 2px solid #0E1726; padding: 6px 12px; font-family: 'Space Mono', monospace; font-weight: 700; font-size: 15px; box-shadow: 2px 2px 0 #0E1726; cursor: pointer; }
+    .wchip:active { transform: translate(2px,2px); box-shadow: none; }
+    .wchip.used { opacity: .25; pointer-events: none; }
+    .pill { display: inline-block; border: 2px solid #0E1726; padding: 4px 10px; font-family: 'Space Mono', monospace; font-weight: 700; font-size: 14px; }
+    .part-S { background: #BDF4FF; } .part-H { background: #FF5226; color: #fff; } .part-V { background: #10B981; color: #fff; } .part-N { background: #FFB3B3; } .part-X { background: #F1F5F9; }
+    .opt:hover:not(:disabled) { background: #FFE800; }
+    .opt:disabled { cursor: default; }
+    .pulse-btn { animation: pulseBtn 1.4s ease-in-out infinite; }
+    @keyframes pulseBtn { 0%,100% { transform: scale(1); } 50% { transform: scale(1.04); } }
+    @media (prefers-reduced-motion: reduce) { .stage, .pulse-btn, .gstar.pop { animation: none; } }
+  </style>
+</head>
+<body data-ga-page="l2-3" class="min-h-screen flex flex-col justify-between items-center p-3 sm:p-5 selection:bg-orange selection:text-cream">
+
+  <header class="w-full max-w-xl flex justify-between items-center bg-white border-2 border-navy p-2.5 sm:p-3 shadow-brutal z-20">
+    <div class="flex items-center gap-2" dir="ltr">
+      <span class="bg-cyan text-navy font-pixel text-[10px] sm:text-xs px-2 py-0.5 border border-navy font-bold">UNIT 01 / LESSON 02</span>
+    </div>
+    <div class="flex items-center gap-2">
+      <div class="bg-yellow text-navy font-pixel text-[11px] sm:text-xs px-2.5 py-0.5 border border-navy font-black shadow-brutal-sm" dir="ltr">03 / 03</div>
+      <button id="soundToggleBtn" onclick="toggleAudio()" class="btn-brutal p-1 bg-white border border-navy text-xs" title="الصوت"><span id="soundIcon">🔊</span></button>
+    </div>
+  </header>
+
+  <main class="w-full max-w-xl flex-1 flex flex-col items-center gap-4 py-3 my-auto">
+    <section class="w-full flex flex-col items-center text-center gap-1.5">
+      <div class="inline-flex items-center gap-1.5 bg-orange text-white border-2 border-navy px-3 py-0.5 shadow-brutal-sm font-pixel text-xs sm:text-sm font-bold rotate-[-1deg]" dir="ltr"><span>🗣 SPEAKING</span></div>
+      <h1 class="font-arabic font-black text-2xl sm:text-3xl text-navy flex items-center justify-center gap-2"><span>Think–Pair–Share</span><span class="text-orange text-xl sm:text-2xl">🗣</span></h1>
+      <p class="font-arabic font-bold text-xs sm:text-sm text-gray-700">نافذة واحدة في كل مرة — ركّز في خطوة واحدة</p>
+      <div id="pips" class="flex items-center justify-center gap-1.5 pt-1" dir="ltr"></div>
+    </section>
+
+    <section id="starPanel" class="hidden w-full bg-white border-2 border-navy p-3 shadow-brutal">
+      <div class="flex justify-between items-center mb-2"><span class="font-arabic font-bold text-sm text-navy">معدل الإنجاز:</span><span class="font-pixel text-xs text-orange" dir="ltr">STARS <span id="sGot">0</span> / <span id="sMax">0</span></span></div>
+      <div id="starRow" class="flex flex-wrap gap-1 justify-center bg-cream border-2 border-navy p-2" dir="ltr"></div>
+    </section>
+
+    <!-- STAGE 1: Topic -->
+    <section class="stage w-full bg-white border-2 sm:border-3 border-navy p-4 sm:p-5 shadow-brutal flex flex-col gap-3">
+      <div class="flex justify-between items-center border-b-2 border-navy pb-2" dir="ltr"><span class="bg-navy text-cyan font-pixel text-[10px] sm:text-xs px-2 py-0.5 border border-navy font-bold">TOPIC • GEN ALPHA’S DIGITAL LIFE</span></div>
+      <div class="bg-yellow border-3 border-navy p-4 text-center shadow-brutal-sm"><div class="font-pixel text-[10px] font-bold text-navy" dir="ltr">TOPIC</div><div class="font-mono font-black text-xl text-navy" dir="ltr">Gen Alpha’s Digital Life</div></div>
+      <div class="flex flex-col gap-2" dir="ltr">
+        <div class="self-start max-w-[88%] bg-white border-2 border-navy p-3 text-sm font-bold shadow-brutal-sm rounded-[18px]">How much screen time do you usually have each day?</div>
+        <div class="self-end max-w-[88%] bg-cyan/40 border-2 border-navy p-3 text-sm font-bold shadow-brutal-sm rounded-[18px]">I spend more than 8 hours using technology devices.</div>
+      </div>
+      <div class="grid grid-cols-3 gap-2 text-center font-arabic font-black text-sm">
+        <div class="border-2 border-navy bg-white p-2">🤔<br>Think<br><span class="text-[10px] font-bold">فكّر</span></div>
+        <div class="border-2 border-navy bg-white p-2">🗣️<br>Pair<br><span class="text-[10px] font-bold">ناقش زميلك</span></div>
+        <div class="border-2 border-navy bg-white p-2">📣<br>Share<br><span class="text-[10px] font-bold">شارك الفصل</span></div>
+      </div>
+      <button id="n1" onclick="playAudio('click'); Stage.go(1)"  class="btn-brutal w-full py-3.5 font-arabic text-base sm:text-lg font-black border-2 border-navy shadow-brutal flex items-center justify-center gap-2 bg-orange text-white hover:bg-yellow hover:text-navy cursor-pointer"><span>ابدأ: Think 🤔</span><span class="font-mono text-xl">←</span></button>
+    </section>
+
+    <!-- STAGE 2: Think -->
+    <section class="stage hidden w-full bg-white border-2 sm:border-3 border-navy p-4 sm:p-5 shadow-brutal flex flex-col gap-3">
+      <div class="flex justify-between items-center border-b-2 border-navy pb-2" dir="ltr"><span class="bg-navy text-cyan font-pixel text-[10px] sm:text-xs px-2 py-0.5 border border-navy font-bold">1 • THINK</span></div>
+      <div class="text-center text-5xl">🤔</div>
+      <div class="bg-yellow border-2 border-navy p-2.5 text-navy font-black text-sm leading-snug" dir="ltr">1. <span class="text-orange">Think:</span> What does Gen Alpha use social media for?</div>
+      <textarea id="think" rows="4" dir="ltr" placeholder="Write your own idea…" class="w-full bg-cream border-2 border-navy p-3 font-mono text-base focus:outline-none focus:border-orange"></textarea>
+      <p id="warn2" class="hidden text-center text-orange font-arabic font-bold text-xs">⚠️ اكتب فكرتك الأول (3 حروف على الأقل).</p>
+      <button id="n2" onclick="goPair()"  class="btn-brutal w-full py-3.5 font-arabic text-base sm:text-lg font-black border-2 border-navy shadow-brutal flex items-center justify-center gap-2 bg-orange text-white hover:bg-yellow hover:text-navy cursor-pointer"><span>التالي: Pair</span><span class="font-mono text-xl">←</span></button>
+    </section>
+
+    <!-- STAGE 3: Pair -->
+    <section class="stage hidden w-full bg-white border-2 sm:border-3 border-navy p-4 sm:p-5 shadow-brutal flex flex-col gap-3">
+      <div class="flex justify-between items-center border-b-2 border-navy pb-2" dir="ltr"><span class="bg-navy text-cyan font-pixel text-[10px] sm:text-xs px-2 py-0.5 border border-navy font-bold">2 • PAIR</span></div>
+      <div class="text-center text-5xl">🗣️</div>
+      <div class="bg-yellow border-2 border-navy p-2.5 text-navy font-black text-sm leading-snug" dir="ltr">2. <span class="text-orange">Pair:</span> Ask your partner. Tick each question after you discuss it.</div>
+      <div id="pairBox" class="flex flex-col gap-2" dir="ltr"></div>
+      <p id="pairHint" class="text-center font-arabic text-xs font-bold text-gray-600">0 / 3 أسئلة ناقشتها</p>
+      <button id="n3" onclick="playAudio('click'); Stage.go(3)" disabled class="btn-brutal w-full py-3.5 font-arabic text-base sm:text-lg font-black border-2 border-navy shadow-brutal flex items-center justify-center gap-2 bg-gray-300 text-gray-500"><span>التالي: Share</span><span class="font-mono text-xl">←</span></button>
+    </section>
+
+    <!-- STAGE 4: Share -->
+    <section class="stage hidden w-full bg-white border-2 sm:border-3 border-navy p-4 sm:p-5 shadow-brutal flex flex-col gap-3">
+      <div class="flex justify-between items-center border-b-2 border-navy pb-2" dir="ltr"><span class="bg-navy text-cyan font-pixel text-[10px] sm:text-xs px-2 py-0.5 border border-navy font-bold">3 • SHARE</span></div>
+      <div class="text-center text-5xl">📣</div>
+      <div class="bg-yellow border-2 border-navy p-2.5 text-navy font-black text-sm leading-snug" dir="ltr">3. <span class="text-orange">Share:</span> Tell the class one thing your partner told you.</div>
+      <textarea id="share" rows="4" dir="ltr" placeholder="My partner told me that…" class="w-full bg-cream border-2 border-navy p-3 font-mono text-base focus:outline-none focus:border-orange"></textarea>
+      <p id="warn4" class="hidden text-center text-orange font-arabic font-bold text-xs">⚠️ اكتب جملة المشاركة (5 حروف على الأقل).</p>
+      <button id="n4" onclick="finish()"  class="btn-brutal w-full py-3.5 font-arabic text-base sm:text-lg font-black border-2 border-navy shadow-brutal flex items-center justify-center gap-2 bg-orange text-white hover:bg-yellow hover:text-navy cursor-pointer"><span>أنهيت النشاط — الدرس 3</span><span class="font-mono text-xl">←</span></button>
+    </section>
+
+  </main>
+
+  <footer class="w-full max-w-xl text-center pt-2 pb-1 text-[11px] font-mono text-gray-600 flex justify-between items-center border-t border-gray-300" dir="ltr">
+    <span>LESSON 02 • SPEAKING</span>
+    <span class="font-bold text-navy">مغامرة جيل ألفا © 2026</span>
+  </footer>
+
+  <script>
+    let audioCtx = null;
+    let audioMuted = false;
+
+    function initAudio() {
+      if (!audioCtx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        audioCtx = new AudioContext();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    function playAudio(type) {
+      if (audioMuted) return;
+      try {
+        initAudio();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        const now = audioCtx.currentTime;
+
+        if (type === 'correct') {
+          const notes = [523.25, 659.25, 783.99, 1046.50];
+          notes.forEach((freq, idx) => {
+            const noteOsc = audioCtx.createOscillator();
+            const noteGain = audioCtx.createGain();
+            noteOsc.type = 'square';
+            noteOsc.frequency.setValueAtTime(freq, now + idx * 0.06);
+            noteGain.gain.setValueAtTime(0.1, now + idx * 0.06);
+            noteGain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.06 + 0.12);
+            noteOsc.connect(noteGain);
+            noteGain.connect(audioCtx.destination);
+            noteOsc.start(now + idx * 0.06);
+            noteOsc.stop(now + idx * 0.06 + 0.12);
+          });
+        } else if (type === 'wrong') {
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(200, now);
+          osc.frequency.exponentialRampToValueAtTime(140, now + 0.15);
+          gain.gain.setValueAtTime(0.12, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+          osc.start(now);
+          osc.stop(now + 0.15);
+        } else if (type === 'fanfare') {
+          const notes = [261.63, 329.63, 392.00, 523.25, 659.25, 783.99];
+          notes.forEach((freq, idx) => {
+            const noteOsc = audioCtx.createOscillator();
+            const noteGain = audioCtx.createGain();
+            noteOsc.type = 'triangle';
+            noteOsc.frequency.setValueAtTime(freq, now + idx * 0.08);
+            noteGain.gain.setValueAtTime(0.15, now + idx * 0.08);
+            noteGain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.2);
+            noteOsc.connect(noteGain);
+            noteGain.connect(audioCtx.destination);
+            noteOsc.start(now + idx * 0.08);
+            noteOsc.stop(now + idx * 0.08 + 0.2);
+          });
+        }
+      } catch(e) {}
+    }
+
+    function toggleAudio() {
+      audioMuted = !audioMuted;
+      document.getElementById('soundIcon').textContent = audioMuted ? '🔇' : '🔊';
+    }
+
+    const $ = (id) => document.getElementById(id);
+    function esc(s) { return String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
+    function shuffle(a) { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+    function showModal(id) { const m = $(id); m.classList.remove('hidden'); m.classList.add('flex'); }
+    function enable(id) { const b = $(id); b.disabled = false; b.className = b.className.replace('bg-gray-300 text-gray-500', 'bg-orange text-white hover:bg-yellow hover:text-navy cursor-pointer'); }
+
+    // ---------- نظام النوافذ: نافذة واحدة في كل مرة ----------
+    const Stage = {
+      n: 0, cur: 0, onChange: null,
+      init(n) { this.n = n; this.go(0, true); },
+      go(i, first) {
+        this.cur = i;
+        document.querySelectorAll('.stage').forEach((s, k) => s.classList.toggle('hidden', k !== i));
+        $('pips').innerHTML = Array.from({ length: this.n }, (_, k) => '<span style="width:' + (k === i ? 26 : 10) + 'px;height:10px;border:2px solid #0E1726;background:' + (k < i ? '#10B981' : k === i ? '#FF5226' : '#fff') + ';transition:all .3s"></span>').join('');
+        if (this.onChange) this.onChange(i);
+        if (!first) window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    };
+
+    // ---------- لوحة النجوم ----------
+    const StarPanel = {
+      got: 0, max: 0,
+      init(max) { this.max = max; this.got = 0; this.render(); },
+      render() { $('sGot').textContent = this.got; $('sMax').textContent = this.max; $('starRow').innerHTML = Array.from({ length: this.max }, (_, i) => '<span class="gstar' + (i < this.got ? ' on' : '') + '" id="gs' + i + '">★</span>').join(''); },
+      add() { const i = this.got; this.got++; this.render(); const el = $('gs' + i); if (el) el.classList.add('pop'); }
+    };
+
+    // ---------- مشغّل الأسئلة: سؤال واحد، تغذية راجعة فورية، إعادة المحاولة لحد الصح ----------
+    function Runner(cfg) {
+      const root = $(cfg.el), qs = cfg.qs; let qi = 0, solved = false;
+      root.innerHTML = '<div class="flex items-center justify-between gap-2 border-b-2 border-navy pb-2" dir="ltr"><span class="r-lab bg-navy text-cyan font-pixel text-[10px] sm:text-xs px-2 py-0.5 border border-navy font-bold"></span><span class="r-cnt font-pixel text-[11px] text-orange"></span></div>' +
+        '<div class="r-prompt bg-yellow border-2 border-navy p-3 text-navy font-black text-base leading-relaxed" dir="ltr"></div>' +
+        '<div class="r-ans flex flex-col gap-2" dir="ltr"></div>' +
+        '<div class="r-fb hidden border-2 p-2.5 font-arabic font-black text-sm text-center"></div>' +
+        '<button class="r-next hidden btn-brutal w-full py-3 bg-cyan text-navy font-arabic font-black text-base border-2 border-navy shadow-brutal-sm hover:bg-lime items-center justify-center gap-2"></button>';
+      const $q = (s) => root.querySelector(s);
+      const prompt = $q('.r-prompt'), ans = $q('.r-ans'), fbEl = $q('.r-fb'), nextEl = $q('.r-next');
+      function fb(ok, msg) {
+        fbEl.classList.remove('hidden', 'border-lime', 'bg-lime/20', 'text-lime', 'border-softRed', 'bg-softRed/10', 'text-softRed');
+        fbEl.classList.add(...(ok ? ['border-lime', 'bg-lime/20', 'text-navy'] : ['border-softRed', 'bg-softRed/10', 'text-softRed']));
+        fbEl.textContent = msg;
+      }
+      function rec(q, a, ok) { GA.answer(cfg.pid, q.id, q.rec || q.prompt, a, ok, q.key); }
+      function win(q) {
+        solved = true; fb(true, '✔ صح! أحسنت 🌟 +1 نجمة'); playAudio('correct'); cfg.onStar();
+        const last = qi === qs.length - 1;
+        nextEl.classList.remove('hidden'); nextEl.classList.add('flex');
+        nextEl.innerHTML = '<span>' + (last ? cfg.finishLabel : 'السؤال التالي') + '</span><span class="font-mono text-xl">←</span>';
+        nextEl.onclick = () => { playAudio('click'); if (last) cfg.onDone(); else { qi++; render(); } };
+        nextEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+      function wrong(msg) { fb(false, msg || '❌ مش صح — جرّب تاني!'); playAudio('wrong'); }
+      function choices(q, host, onPick) {
+        let opts = q.shuffle ? shuffle(q.options) : q.options;
+        host.innerHTML = '';
+        opts.forEach((o) => {
+          const b = document.createElement('button');
+          b.className = 'opt btn-brutal text-left p-3 border-2 border-navy bg-white font-bold text-sm sm:text-base shadow-brutal-sm';
+          b.innerHTML = esc(o.t); b.onclick = () => onPick(o, b, host); host.appendChild(b);
+        });
+      }
+      function renderChoice(q) {
+        choices(q, ans, (o, b, host) => {
+          if (solved) return; const ok = o.v === q.answer; rec(q, o.t, ok);
+          if (ok) { b.classList.remove('bg-white'); b.classList.add('bg-lime', 'text-white'); host.querySelectorAll('button').forEach(x => x.disabled = true); if (q.winHtml) prompt.innerHTML = q.winHtml; win(q); }
+          else { b.classList.remove('bg-white'); b.classList.add('bg-softRed', 'text-white'); b.disabled = true; wrong(); }
+        });
+      }
+      function renderBuild(q) {
+        let tray = []; const pool = shuffle(q.pool.map((w, i) => ({ w, i })));
+        ans.innerHTML = '<div class="b-tray min-h-[58px] border-2 border-dashed border-navy bg-cream p-2 flex flex-wrap gap-1.5 items-center"></div><div class="b-pool flex flex-wrap gap-1.5 justify-center py-1"></div>' +
+          '<div class="flex gap-2"><button class="b-clear btn-brutal px-3 py-2.5 bg-white border-2 border-navy font-arabic font-black text-sm shadow-brutal-sm">↺ مسح</button><button class="b-check btn-brutal flex-1 py-2.5 bg-orange text-white border-2 border-navy font-arabic font-black text-sm shadow-brutal-sm hover:bg-yellow hover:text-navy">✔ تحقق من الجملة</button></div>';
+        const trayEl = ans.querySelector('.b-tray'), poolEl = ans.querySelector('.b-pool');
+        function paint() {
+          trayEl.innerHTML = tray.length ? '' : '<span class="text-xs text-gray-500 font-arabic font-bold">اضغط على الكلمات بالترتيب لتكوين الجملة…</span>';
+          tray.forEach((p, k) => { const c = document.createElement('button'); c.className = 'wchip bg-cyan'; c.textContent = p.w; c.onclick = () => { if (solved) return; tray.splice(k, 1); paint(); }; trayEl.appendChild(c); });
+          poolEl.innerHTML = '';
+          pool.forEach((p) => { const c = document.createElement('button'); c.className = 'wchip' + (tray.includes(p) ? ' used' : ''); c.textContent = p.w; c.onclick = () => { if (solved) return; tray.push(p); paint(); playAudio('click'); }; poolEl.appendChild(c); });
+        }
+        paint();
+        ans.querySelector('.b-clear').onclick = () => { if (!solved) { tray = []; paint(); } };
+        ans.querySelector('.b-check').onclick = () => {
+          if (solved) return; if (!tray.length) { wrong('⚠️ ركّب الجملة الأول!'); return; }
+          const s = tray.map(p => p.w.toLowerCase()).join(' '), ok = q.answers.includes(s); rec(q, tray.map(p => p.w).join(' '), ok);
+          if (ok) { trayEl.classList.add('border-lime'); ans.querySelectorAll('button').forEach(x => x.disabled = true); win(q); }
+          else { trayEl.classList.add('border-softRed'); setTimeout(() => trayEl.classList.remove('border-softRed'), 700); wrong('❌ الجملة مش مظبوطة — راجع ترتيب الكلمات وشكل الفعل وجرّب تاني!'); }
+        };
+      }
+      function renderDetect(q) {
+        ans.innerHTML = '<div class="d-chunks flex flex-wrap gap-2 justify-center py-1"></div><div class="d-fix hidden flex-col gap-2"></div>';
+        const ch = ans.querySelector('.d-chunks'), fix = ans.querySelector('.d-fix'); let found = false;
+        q.chunks.forEach((c) => {
+          const b = document.createElement('button'); b.className = 'wchip text-base'; b.textContent = c.t;
+          b.onclick = () => {
+            if (solved || found) return;
+            if (c.bad) { found = true; b.classList.add('bg-softRed', 'text-white'); playAudio('correct'); fb(true, '🔍 لقيت الغلطة! دلوقتي اختار التصحيح الصح 👇'); fix.classList.remove('hidden'); fix.classList.add('flex');
+              choices({ options: q.options, shuffle: q.shuffle }, fix, (o, ob, host) => {
+                if (solved) return; const ok = o.v === q.answer; rec(q, '[' + c.t + '] → ' + o.t, ok);
+                if (ok) { ob.classList.remove('bg-white'); ob.classList.add('bg-lime', 'text-white'); host.querySelectorAll('button').forEach(x => x.disabled = true); prompt.textContent = q.fixed; win(q); }
+                else { ob.classList.remove('bg-white'); ob.classList.add('bg-softRed', 'text-white'); ob.disabled = true; wrong('❌ مش صح — جرّب تصحيح تاني!'); }
+              });
+            } else { b.classList.add('opacity-40'); b.disabled = true; rec(q, 'Tapped: ' + c.t, false); wrong('❌ الجزء ده سليم — دوّر على الغلطة تاني!'); }
+          };
+          ch.appendChild(b);
+        });
+      }
+      function render() {
+        const q = qs[qi]; solved = false;
+        $q('.r-lab').textContent = q.label; $q('.r-cnt').textContent = (qi + 1) + ' / ' + qs.length;
+        prompt.innerHTML = q.prompt; fbEl.classList.add('hidden'); nextEl.classList.add('hidden'); nextEl.classList.remove('flex'); ans.innerHTML = '';
+        if (q.type === 'build') renderBuild(q); else if (q.type === 'detect') renderDetect(q); else renderChoice(q);
+        if (q.type === 'detect') { fb(true, '👆 اضغط على الجزء اللي فيه الغلطة'); fbEl.classList.remove('border-lime', 'bg-lime/20'); fbEl.classList.add('border-navy', 'bg-white'); }
+      }
+      render();
+    }
+
+
+    StarPanel.init(0);
+    Stage.init(4);
+    const PAIR = ['Does Gen Alpha use social media wisely?', 'How bad is too much screen time for them?', 'What is the role of teachers and parents towards Gen Alpha?'];
+    const ticked = PAIR.map(() => false);
+    $('pairBox').innerHTML = PAIR.map((q, i) => '<button id="pair_' + i + '" onclick="tick(' + i + ')" class="btn-brutal text-left p-3 border-2 border-navy bg-white font-bold text-sm sm:text-base shadow-brutal-sm flex items-center gap-2"><span id="pairBox_' + i + '" class="w-7 h-7 border-2 border-navy bg-cream flex items-center justify-center text-base shrink-0"></span><span>' + esc(q) + '</span></button>').join('');
+    function tick(i) {
+      ticked[i] = !ticked[i]; playAudio('correct');
+      $('pairBox_' + i).textContent = ticked[i] ? '✓' : ''; $('pair_' + i).classList.toggle('bg-cyan', ticked[i]); $('pair_' + i).classList.toggle('bg-white', !ticked[i]);
+      const n = ticked.filter(Boolean).length; $('pairHint').textContent = n + ' / 3 أسئلة ناقشتها';
+      if (n === 3) { enable('n3'); $('pairHint').innerHTML = '<span class="text-lime">✅ ناقشت كل الأسئلة</span>'; }
+    }
+    function goPair() {
+      if ($('think').value.trim().length < 3) { $('warn2').classList.remove('hidden'); playAudio('wrong'); return; }
+      GA.answer('l2-3', 'think', 'Think: What does Gen Alpha use social media for?', $('think').value.trim(), null); playAudio('click'); Stage.go(2);
+    }
+    function finish() {
+      const sh = $('share').value.trim();
+      if (sh.length < 5) { $('warn4').classList.remove('hidden'); playAudio('wrong'); return; }
+      PAIR.forEach((q, i) => GA.answer('l2-3', 'pair' + (i + 1), 'Pair: ' + q, 'Discussed with partner ✔', null));
+      GA.answer('l2-3', 'share', 'Share: Tell the class one thing your partner told you.', sh, null);
+      GA.done('l2-3', {}); playAudio('fanfare'); setTimeout(() => { location.href = 'l3-1-before-you-start.html'; }, 300);
+    }
+
+  </script>
+</body>
+</html>

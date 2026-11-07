@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="h-full">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>لوحة المعلم | مغامرة جيل ألفا</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts: Cairo, Kufam, Silkscreen, Space Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;900&family=Kufam:wght@700;800;900&family=Silkscreen:wght@400;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cream: '#FAF7F2',
+            navy: '#0E1726',
+            orange: '#FF5226',
+            cyan: '#00E5FF',
+            yellow: '#FFE800',
+            lime: '#10B981',
+          },
+          fontFamily: {
+            arabic: ['Kufam', 'Cairo', 'sans-serif'],
+            cairo: ['Cairo', 'sans-serif'],
+            pixel: ['Silkscreen', 'monospace'],
+            mono: ['Space Mono', 'monospace'],
+          },
+          boxShadow: {
+            'brutal-sm': '2px 2px 0px #0E1726',
+            'brutal': '4px 4px 0px #0E1726',
+            'brutal-lg': '6px 6px 0px #0E1726',
+            'brutal-orange': '4px 4px 0px #FF5226',
+            'brutal-cyan': '4px 4px 0px #00E5FF',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #FAF7F2;
+      color: #0E1726;
+      font-family: 'Cairo', sans-serif;
+      overflow-x: hidden;
+      background-image: radial-gradient(#0E1726 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+
+    .btn-brutal {
+      transition: all 0.1s ease-in-out;
+    }
+    .btn-brutal:active {
+      transform: translate(3px, 3px);
+      box-shadow: 1px 1px 0px #0E1726 !important;
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0E1726;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #00E5FF;
+    }
+  </style>
+  <script src="app.js"></script>
+</head>
+<body data-ga-bar="off" class="min-h-screen flex flex-col items-center gap-4 p-4 sm:p-6 selection:bg-orange selection:text-cream">
+  <header class="w-full max-w-3xl flex justify-between items-center bg-white border-2 sm:border-3 border-navy p-2.5 sm:p-3 shadow-brutal z-20">
+    <div class="flex items-center gap-2.5">
+      <div id="userAvatarContainer" class="relative group cursor-pointer">
+        <div id="avatarCircle" class="w-8 h-8 sm:w-9 sm:h-9 bg-yellow border-2 border-navy rounded-full flex items-center justify-center font-black text-xs sm:text-sm shadow-brutal-sm text-navy uppercase">👤</div>
+        <span id="userRoleBadge" class="hidden absolute -bottom-1 -right-1 bg-cyan text-navy border border-navy text-[8px] font-mono px-1 font-bold">STD</span>
+      </div>
+      <div class="flex flex-col">
+        <span class="font-pixel text-[9px] sm:text-[11px] tracking-wider text-navy font-bold uppercase" dir="ltr">ENGLISH • PREP 2</span>
+        <span id="headerUserName" class="font-arabic text-[11px] font-bold text-orange truncate max-w-[100px] sm:max-w-[140px]">زائر</span>
+      </div>
+    </div>
+    <div class="flex items-center gap-2 sm:gap-3" dir="ltr">
+      <div id="clock" class="font-pixel text-[10px] sm:text-xs text-navy bg-cream px-2 py-0.5 border border-navy font-bold">00:00:00</div>
+      <button onclick="GA.logout()" class="btn-brutal px-2 py-1 bg-white border border-navy shadow-brutal-sm text-navy font-arabic font-black text-[11px] sm:text-xs hover:bg-orange hover:text-white">🚪 <span class="hidden sm:inline">خروج</span></button>
+    </div>
+  </header>
+
+  <main class="w-full max-w-3xl flex-1 flex flex-col gap-4 py-2">
+    <section class="w-full text-center flex flex-col items-center gap-2">
+      <div class="inline-flex items-center gap-1.5 bg-yellow text-navy border-2 border-navy px-3.5 py-1 shadow-brutal-sm font-mono text-xs font-bold rotate-[-1deg]" dir="ltr"><span>📊 TEACHER_DASHBOARD</span></div>
+      <h1 class="font-arabic text-3xl sm:text-4xl font-black text-navy">لوحة تحكم المعلم</h1>
+      <p class="font-arabic text-sm font-bold text-gray-700">متابعة الطلاب: وصلوا لفين، تخطّوا إيه، إجاباتهم، والاختبار النهائي</p>
+    </section>
+
+    <section class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      <div class="bg-white border-2 border-navy shadow-brutal p-3 text-center"><div class="font-pixel text-2xl text-navy" id="kStudents" dir="ltr">0</div><div class="font-arabic text-[11px] font-bold">عدد الطلاب</div></div>
+      <div class="bg-white border-2 border-navy shadow-brutal p-3 text-center"><div class="font-pixel text-2xl text-orange" id="kAvg" dir="ltr">0%</div><div class="font-arabic text-[11px] font-bold">متوسط التقدم</div></div>
+      <div class="bg-white border-2 border-navy shadow-brutal p-3 text-center"><div class="font-pixel text-2xl text-lime" id="kFinal" dir="ltr">0</div><div class="font-arabic text-[11px] font-bold">أدّوا الاختبار النهائي</div></div>
+      <div class="bg-white border-2 border-navy shadow-brutal p-3 text-center"><div class="font-pixel text-2xl text-navy" id="kFinalAvg" dir="ltr">—</div><div class="font-arabic text-[11px] font-bold">متوسط درجة الاختبار</div></div>
+    </section>
+
+    <section class="bg-white border-2 border-navy shadow-brutal p-3 flex flex-col gap-2">
+      <input id="search" type="search" placeholder="🔍 ابحث باسم الطالب..." class="w-full bg-cream border-2 border-navy p-2.5 font-cairo font-bold text-navy text-sm focus:outline-none focus:border-orange" />
+      <div class="flex flex-wrap gap-2">
+        <button onclick="refresh(true)" class="btn-brutal px-3 py-1.5 bg-cyan text-navy font-arabic font-black text-xs border-2 border-navy shadow-brutal-sm hover:bg-lime">🔄 تحديث</button>
+        <button onclick="exportCSV()" class="btn-brutal px-3 py-1.5 bg-yellow text-navy font-arabic font-black text-xs border-2 border-navy shadow-brutal-sm">⬇️ تقرير Excel (CSV)</button>
+        <button onclick="exportJSON()" class="btn-brutal px-3 py-1.5 bg-white text-navy font-arabic font-black text-xs border-2 border-navy shadow-brutal-sm hover:bg-yellow">⬇️ نسخة JSON</button>
+        <button onclick="document.getElementById('imp').click()" class="btn-brutal px-3 py-1.5 bg-white text-navy font-arabic font-black text-xs border-2 border-navy shadow-brutal-sm hover:bg-yellow">⬆️ استيراد ملف طالب</button>
+        <input id="imp" type="file" accept=".json,application/json" multiple class="hidden" />
+      </div>
+      <div id="syncLine" class="font-arabic text-[11px] font-bold text-gray-600"></div>
+    </section>
+
+    <section id="list" class="flex flex-col gap-4"></section>
+  </main>
+
+  <footer class="w-full max-w-3xl text-center pt-3 pb-1 text-[11px] sm:text-xs font-mono text-gray-600 flex justify-between items-center border-t border-gray-300" dir="ltr">
+    <span>PREP 2 • UNIT 1 DIGI-QUEST</span>
+    <span class="font-bold text-navy">مغامرة جيل ألفا © 2026</span>
+  </footer>
+
+  <script>
+    function updateClock(){const n=new Date(),p=v=>String(v).padStart(2,'0');const c=document.getElementById('clock');if(c)c.textContent=p(n.getHours())+':'+p(n.getMinutes())+':'+p(n.getSeconds());}
+    setInterval(updateClock,1000);updateClock();
+    GA.fillHeader();
+    const S = GA.session();
+    if (!S || S.role !== 'teacher') { location.replace('signin.html'); }
+    const esc = GA.esc;
+    let DATA = {}, OPEN = new Set();
+
+    function finalPanel(r) {
+      const p = r.pages[GA.FINAL_ID], fin = GA.finalResult(r);
+      let h = '<div class="ga-final p-3 flex flex-col gap-2"><div class="flex items-center justify-between gap-2 flex-wrap"><b class="font-arabic text-base">🏆 الاختبار النهائي (Assessment Corner)</b>';
+      if (fin && fin.score) h += '<span class="font-pixel text-xl text-orange" dir="ltr">' + fin.score.got + ' / ' + fin.score.max + '</span></div><div class="font-arabic text-xs font-bold text-gray-600">سُلّم ' + esc(GA.fmtDate(fin.completedAt)) + ' • عدد مرات التسليم: ' + fin.attempts + '</div><div class="ga-body" style="padding:6px 0 0;background:transparent;border:0">' + GA.renderAnswers(fin) + '</div>';
+      else h += '</div><div class="font-arabic text-xs font-bold ' + (p && p.visits ? 'text-orange' : 'text-gray-600') + '">' + (p && p.visits ? '⚠️ فتح الاختبار ولم يسلّمه بعد.' : 'لم يصل الطالب للاختبار النهائي بعد.') + '</div>';
+      return h + '</div>';
+    }
+
+    function card(r) {
+      const pr = GA.progress(r), f = GA.furthestPage(r), sk = GA.skippedList(r), fin = GA.finalResult(r), sc = GA.stars(r);
+      const open = OPEN.has(r.id);
+      let h = '<article class="bg-white border-3 border-navy shadow-brutal-lg" data-id="' + esc(r.id) + '" data-name="' + esc((r.name || '').toLowerCase()) + '">' +
+        '<div class="p-3 flex flex-col gap-2">' +
+        '<div class="flex items-center gap-3"><div class="w-11 h-11 shrink-0 bg-yellow border-2 border-navy rounded-full flex items-center justify-center text-xl shadow-brutal-sm">' + esc(r.avatar || '👤') + '</div>' +
+        '<div class="min-w-0 flex-1"><div class="font-arabic font-black text-base text-navy truncate">' + esc(r.name) + '</div><div class="font-arabic text-[11px] font-bold text-gray-500">آخر نشاط: ' + esc(GA.ago(r.lastActive)) + '</div></div>' +
+        '<div class="font-pixel text-lg text-orange" dir="ltr">' + pr.pct + '%</div></div>' +
+        '<div class="w-full h-3 bg-cream border-2 border-navy"><div class="h-full bg-lime" style="width:' + pr.pct + '%"></div></div>' +
+        '<div class="font-arabic text-xs font-bold text-navy">📍 وصل إلى: ' + (f ? 'الدرس ' + f.lesson + ' — ' + esc(f.ar) : 'لم يبدأ') + ' <span class="text-gray-500">(' + pr.done + '/' + pr.total + ' صفحة مكتملة)</span></div>' +
+        '<div class="flex flex-wrap gap-1.5 text-[11px] font-arabic font-black">' +
+        '<span class="px-2 py-0.5 border border-navy ' + (sk.length ? 'bg-orange text-white' : 'bg-lime text-white') + '">' + (sk.length ? '⏭️ تخطّى ' + sk.length + ' صفحة' : '✅ لا تخطّي') + '</span>' +
+        '<span class="px-2 py-0.5 border border-navy ' + (fin ? 'bg-yellow text-navy' : 'bg-gray-200 text-gray-600') + '">🏆 ' + (fin && fin.score ? 'الاختبار: ' + fin.score.got + '/' + fin.score.max : 'لم يؤدِّ الاختبار') + '</span>' +
+        '<span class="px-2 py-0.5 border border-navy bg-cyan text-navy" dir="ltr">⭐ ' + sc.got + '/' + sc.max + '</span></div>' +
+        '<div class="flex gap-2 pt-1"><button onclick="toggle(\'' + esc(r.id).replace(/'/g, "\\'") + '\')" class="btn-brutal flex-1 py-2 bg-orange text-white font-arabic font-black text-sm border-2 border-navy shadow-brutal-sm hover:bg-yellow hover:text-navy">' + (open ? '▲ إخفاء التفاصيل' : '▼ عرض التفاصيل والإجابات') + '</button>' +
+        '<button onclick="del(\'' + esc(r.id).replace(/'/g, "\\'") + '\')" class="btn-brutal px-3 py-2 bg-white text-navy font-arabic font-black text-xs border-2 border-navy shadow-brutal-sm hover:bg-orange hover:text-white" title="حذف الطالب">🗑</button></div></div>';
+      if (open) {
+        h += '<div class="border-t-3 border-navy p-3 bg-cream flex flex-col gap-3">';
+        if (sk.length) h += '<div class="bg-orange/20 border-2 border-orange text-orange font-arabic text-xs font-bold p-2.5">⏭️ الصفحات المتخطاة: ' + sk.map(p => 'الدرس ' + p.lesson + ' ← ' + esc(p.ar)).join(' ، ') + '</div>';
+        h += finalPanel(r) + GA.report(r, { teacher: true }) + '</div>';
+      }
+      return h + '</article>';
+    }
+
+    function render() {
+      const arr = Object.values(DATA).sort((a, b) => (b.lastActive || 0) - (a.lastActive || 0));
+      document.getElementById('kStudents').textContent = arr.length;
+      const avg = arr.length ? Math.round(arr.reduce((s, r) => s + GA.progress(r).pct, 0) / arr.length) : 0;
+      document.getElementById('kAvg').textContent = avg + '%';
+      const fins = arr.map(GA.finalResult).filter(x => x && x.score);
+      document.getElementById('kFinal').textContent = fins.length;
+      document.getElementById('kFinalAvg').textContent = fins.length ? (fins.reduce((s, x) => s + x.score.got, 0) / fins.length).toFixed(1) + '/12' : '—';
+      const box = document.getElementById('list');
+      box.innerHTML = arr.length ? arr.map(card).join('') :
+        '<div class="bg-white border-3 border-dashed border-gray-400 p-6 text-center font-arabic font-bold text-gray-600">لا يوجد طلاب مسجّلين بعد.<br><span class="text-xs">أول ما أي طالب يدخل ويبدأ الدروس هيظهر هنا.</span></div>';
+      applySearch();
+    }
+    function applySearch() {
+      const q = document.getElementById('search').value.trim().toLowerCase();
+      document.querySelectorAll('#list article').forEach(a => { a.style.display = !q || a.dataset.name.includes(q) ? '' : 'none'; });
+    }
+    function toggle(id) { OPEN.has(id) ? OPEN.delete(id) : OPEN.add(id); render(); }
+    function del(id) {
+      const r = DATA[id]; if (!r || !confirm('حذف بيانات الطالب «' + r.name + '» نهائياً؟')) return;
+      delete DATA[id]; const d = GA.db(); delete d[id]; GA.saveDb(d); OPEN.delete(id);
+      if (GA.syncOn()) fetch(syncUrl('students/' + encodeURIComponent(id)), { method: 'DELETE' }).catch(() => {});
+      render();
+    }
+    function syncUrl(p) { return GA_SYNC_URL.replace(/\/$/, '') + '/' + GA_SYNC_ROOT + '/' + p + '.json'; }
+
+    async function refresh(manual) {
+      const res = await GA.loadAll();
+      DATA = res.data;
+      const line = document.getElementById('syncLine');
+      line.textContent = !res.cloud
+        ? 'ℹ️ وضع الجهاز الواحد: تظهر بيانات الطلاب الذين استخدموا هذا المتصفح فقط. لعرض طلاب من أجهزة أخرى: فعّل المزامنة السحابية أو استورد ملفات الطلاب.'
+        : (res.ok ? '☁️ متصل بالمزامنة السحابية — آخر تحديث ' + new Date().toLocaleTimeString('ar-EG') : '⚠️ تعذّر الاتصال بالسحابة — تُعرض البيانات المحفوظة على هذا الجهاز.');
+      render();
+    }
+    document.getElementById('search').addEventListener('input', applySearch);
+
+    function exportCSV() { GA.download('students-report.csv', GA.toCSV(DATA), 'text/csv;charset=utf-8'); }
+    function exportJSON() { GA.download('students-data.json', JSON.stringify(DATA, null, 1), 'application/json'); }
+    document.getElementById('imp').addEventListener('change', async e => {
+      let n = 0; const local = GA.db();
+      for (const f of e.target.files) {
+        try { const j = JSON.parse(await f.text()); n += GA.mergeInto(local, j); } catch (err) { alert('الملف «' + f.name + '» غير صالح'); }
+      }
+      GA.saveDb(local); e.target.value = ''; alert('تم استيراد/تحديث ' + n + ' طالب'); refresh();
+    });
+
+    refresh();
+    if (GA.syncOn()) setInterval(() => refresh(false), 20000);
+  </script>
+</body>
+</html>

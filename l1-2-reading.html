@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="h-full">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Read, Listen & Explore | Meet Gen Alpha</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts: Cairo, Kufam, Silkscreen, Space Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800;900&family=Kufam:wght@700;800;900&family=Silkscreen:wght@400;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cream: '#FAF7F2',
+            navy: '#0E1726',
+            orange: '#FF5226',
+            cyan: '#00E5FF',
+            yellow: '#FFE800',
+            lime: '#10B981',
+            softGray: '#F0EAE1',
+          },
+          fontFamily: {
+            arabic: ['Kufam', 'Cairo', 'sans-serif'],
+            cairo: ['Cairo', 'sans-serif'],
+            pixel: ['Silkscreen', 'monospace'],
+            mono: ['Space Mono', 'monospace'],
+          },
+          boxShadow: {
+            'brutal-sm': '2px 2px 0px #0E1726',
+            'brutal': '4px 4px 0px #0E1726',
+            'brutal-lg': '6px 6px 0px #0E1726',
+            'brutal-orange': '4px 4px 0px #FF5226',
+            'brutal-cyan': '4px 4px 0px #00E5FF',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Neo-Brutalist Retro Digital Styling */
+    body {
+      background-color: #FAF7F2;
+      color: #0E1726;
+      font-family: 'Cairo', sans-serif;
+      overflow-x: hidden;
+      background-image: radial-gradient(#0E1726 1.1px, transparent 1.1px);
+      background-size: 20px 20px;
+    }
+
+    /* Interactive Button Click Effect */
+    .btn-brutal {
+      transition: all 0.1s ease-in-out;
+    }
+    .btn-brutal:active {
+      transform: translate(2px, 2px);
+      box-shadow: 1px 1px 0px #0E1726 !important;
+    }
+
+    /* Sentence Highlighting Style during Speech Synthesis */
+    .sentence-active {
+      background-color: #FFE800 !important;
+      color: #0E1726 !important;
+      border-right: 4px solid #FF5226 !important;
+      padding: 2px 6px !important;
+      border-radius: 2px !important;
+      box-shadow: 2px 2px 0px #0E1726 !important;
+      font-weight: 700 !important;
+    }
+
+    /* Clickable Vocab Marks in Reading Text */
+    .vocab-mark {
+      background-color: #00E5FF;
+      color: #0E1726;
+      border: 1.5px solid #0E1726;
+      padding: 1px 5px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-block;
+      margin: 0 1px;
+      transition: all 0.15s ease;
+      box-shadow: 1.5px 1.5px 0px #0E1726;
+    }
+    .vocab-mark:hover {
+      background-color: #FF5226;
+      color: #FFFFFF;
+      transform: translateY(-1px);
+    }
+
+    /* Scanlines Overlay for Audio Deck & Modal */
+    .scanlines {
+      position: relative;
+      overflow: hidden;
+    }
+    .scanlines::before {
+      content: " ";
+      display: block;
+      position: absolute;
+      top: 0; left: 0; bottom: 0; right: 0;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.15) 50%);
+      background-size: 100% 4px;
+      z-index: 5;
+      pointer-events: none;
+      opacity: 0.5;
+    }
+
+    /* Blinking Equalizer Animation */
+    @keyframes barPulse {
+      0%, 100% { height: 4px; }
+      50% { height: 16px; }
+    }
+    .eq-bar {
+      animation: barPulse 0.6s ease-in-out infinite;
+    }
+    .eq-bar:nth-child(2) { animation-delay: 0.15s; }
+    .eq-bar:nth-child(3) { animation-delay: 0.3s; }
+    .eq-bar:nth-child(4) { animation-delay: 0.45s; }
+
+    /* Scrollbar customization */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #FAF7F2;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #0E1726;
+    }
+  </style>
+  <script src="app.js"></script>
+</head>
+
+<body data-ga-page="l1-2" class="min-h-screen flex flex-col justify-between items-center p-3 sm:p-5 selection:bg-orange selection:text-cream">
+
+  <!-- TOP DECORATIVE HEADER BAR -->
+  <header class="w-full max-w-3xl flex justify-between items-center bg-white border-2 sm:border-3 border-navy p-2.5 sm:p-3 shadow-brutal z-20 mb-3">
+    <!-- Navigation Back & Step Title -->
+    <div class="flex items-center gap-2">
+      <button onclick="goToWarmup()" class="btn-brutal px-2.5 py-1 bg-cream border border-navy font-arabic font-bold text-xs text-navy hover:bg-yellow flex items-center gap-1 shadow-brutal-sm">
+        <span>→</span>
+        <span class="hidden sm:inline">التمهيد</span>
+      </button>
+
+      <span class="bg-cyan text-navy font-pixel text-[10px] sm:text-xs px-2 py-1 border border-navy font-bold" dir="ltr">
+        UNIT 01 / LESSON 01 • READ & EXPLORE
+      </span>
+    </div>
+
+    <!-- Step Progress & Sound Control -->
+    <div class="flex items-center gap-2">
+      <div class="bg-yellow text-navy font-pixel text-[11px] sm:text-xs px-2.5 py-1 border border-navy font-black shadow-brutal-sm" dir="ltr">
+        01 / 05
+      </div>
+      <button id="soundToggleBtn" onclick="toggleAudioSynth()" class="btn-brutal p-1 sm:p-1.5 bg-white border border-navy text-xs shadow-brutal-sm" title="مؤثرات الصوت">
+        <span id="soundIcon">🔊</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT CONTAINER -->
+  <main class="w-full max-w-3xl flex-1 flex flex-col items-center gap-4 py-2">
+
+    <!-- PAGE TITLE & BADGES -->
+    <section class="w-full flex flex-col items-center text-center gap-1.5">
+      <div class="inline-flex items-center gap-1.5 bg-orange text-white border-2 border-navy px-3 py-0.5 shadow-brutal-sm font-pixel text-xs font-bold rotate-[-1deg]" dir="ltr">
+        <span>📖 READ, LISTEN & EXPLORE</span>
+      </div>
+
+      <h1 class="font-mono font-black text-2xl sm:text-4xl text-navy tracking-tight mt-1" dir="ltr">
+        Gen Alpha: The Young Digital Natives
+      </h1>
+
+      <p class="font-arabic font-bold text-xs sm:text-sm text-navy bg-yellow px-3 py-1 border border-navy shadow-brutal-sm">
+        اقرأ النص، استمع للنطق الصحيح، واستكشف معاني الكلمات المهمة! 🎧💡
+      </p>
+    </section>
+
+    <!-- AUDIO PLAYER DECK ("LISTEN & FOLLOW") -->
+<audio id="passageAudio" preload="auto">
+  <source src="./audio/1.mp3" type="audio/mpeg">
+</audio>
+    <section class="w-full bg-navy border-2 sm:border-3 border-navy p-3 sm:p-4 shadow-brutal text-cream scanlines relative">
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-3 z-10 relative">
+        
+        <!-- Deck Title & Status Indicator -->
+        <div class="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-start">
+          <div class="flex items-center gap-2" dir="ltr">
+            <span class="w-3 h-3 rounded-full bg-orange border border-black inline-block"></span>
+            <span class="font-pixel text-xs text-cyan tracking-wider font-bold">LISTEN & FOLLOW</span>
+          </div>
+
+          <!-- Equalizer Animation (Active during play) -->
+          <div id="eqContainer" class="hidden flex items-end gap-1 h-5 px-2 bg-slate-900 border border-slate-700">
+            <span class="w-1 bg-yellow eq-bar"></span>
+            <span class="w-1 bg-cyan eq-bar"></span>
+            <span class="w-1 bg-orange eq-bar"></span>
+            <span class="w-1 bg-lime eq-bar"></span>
+          </div>
+        </div>
+
+        <!-- Audio Action Controls -->
+        <div class="flex items-center gap-2 w-full sm:w-auto justify-center" dir="ltr">
+          <!-- Play / Pause Button -->
+          <button id="playPauseBtn" onclick="toggleSpeech()" class="btn-brutal px-4 py-2 bg-cyan text-navy font-pixel text-xs sm:text-sm font-bold border-2 border-navy shadow-brutal-sm hover:bg-yellow flex items-center gap-2">
+            <span id="playIcon">▶</span>
+            <span id="playText">PLAY</span>
+          </button>
+
+          <!-- Stop / Replay Button -->
+          <button onclick="stopSpeech()" class="btn-brutal px-3 py-2 bg-cream text-navy font-pixel text-xs font-bold border-2 border-navy shadow-brutal-sm hover:bg-orange hover:text-white" title="إعادة للنهاية/توقف">
+            ⏹ STOP
+          </button>
+
+          <!-- Speed Control Selector -->
+          <div class="flex items-center border-2 border-navy bg-white text-navy font-pixel text-[10px] overflow-hidden">
+            <button onclick="setSpeed(0.8, this)" class="speed-btn px-2 py-1.5 hover:bg-yellow border-r border-navy font-bold">0.8x</button>
+            <button onclick="setSpeed(1.0, this)" class="speed-btn px-2 py-1.5 bg-yellow font-bold border-r border-navy">1.0x</button>
+            <button onclick="setSpeed(1.2, this)" class="speed-btn px-2 py-1.5 hover:bg-yellow font-bold">1.2x</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- READING PASSAGE CONTAINER -->
+    <section class="w-full bg-white border-2 sm:border-3 border-navy p-4 sm:p-6 shadow-brutal space-y-4" dir="ltr">
+      
+      <!-- Paragraph 1 -->
+      <p class="font-mono text-sm sm:text-base text-navy leading-loose tracking-wide">
+        <span id="sent-0" class="sentence-item">Do you know that you are one of Gen Alpha, who were born from around 2010 to the mid-2020s?</span> 
+        <span id="sent-1" class="sentence-item">Today's young <mark onclick="openVocabModal('generation')" class="vocab-mark">generation</mark>, Gen Alpha, is changing the way we live and <mark onclick="openVocabModal('communicate')" class="vocab-mark">communicate</mark>.</span> 
+        <span id="sent-2" class="sentence-item">They are <mark onclick="openVocabModal('digital natives')" class="vocab-mark">digital natives</mark>, because they learn to use technology before they can read, and they usually spend a lot of time online, exploring the latest <mark onclick="openVocabModal('trends')" class="vocab-mark">trends</mark>.</span> 
+        <span id="sent-3" class="sentence-item">They like creating short videos to show their <mark onclick="openVocabModal('hobbies')" class="vocab-mark">hobbies</mark> or <mark onclick="openVocabModal('opinions')" class="vocab-mark">opinions</mark>.</span>
+      </p>
+
+      <!-- Paragraph 2 -->
+      <p class="font-mono text-sm sm:text-base text-navy leading-loose tracking-wide">
+        <span id="sent-4" class="sentence-item">At the moment, many Gen Alpha children are using social media to learn about the world and to connect with others.</span> 
+        <span id="sent-5" class="sentence-item">They are constantly discovering new trends that quickly spread across their digital communities.</span> 
+        <span id="sent-6" class="sentence-item">For example, they share <mark onclick="openVocabModal('memes')" class="vocab-mark">memes</mark> and sometimes send <mark onclick="openVocabModal('emojis')" class="vocab-mark">emojis</mark> instead of words because they like showing emotions in a creative, fun way.</span>
+      </p>
+
+      <!-- Paragraph 3 -->
+      <p class="font-mono text-sm sm:text-base text-navy leading-loose tracking-wide">
+        <span id="sent-7" class="sentence-item">Teachers and parents often wonder how this generation will grow up with so much technology around them.</span> 
+        <span id="sent-8" class="sentence-item">Right now, many parents are trying to limit <mark onclick="openVocabModal('screen time')" class="vocab-mark">screen time</mark> while also encouraging useful digital skills.</span> 
+        <span id="sent-9" class="sentence-item">Gen Alpha rarely spends a day without using technology, but they are also learning to <mark onclick="openVocabModal('balance')" class="vocab-mark">balance</mark> online activities with <mark onclick="openVocabModal('real-life connections')" class="vocab-mark">real-life connections</mark>.</span>
+      </p>
+
+      <!-- Paragraph 4 -->
+      <p class="font-mono text-sm sm:text-base text-navy leading-loose tracking-wide">
+        <span id="sent-10" class="sentence-item">This generation represents a powerful trend that is shaping the future.</span> 
+        <span id="sent-11" class="sentence-item">Gen Alpha always looks for new ways to express themselves and likes using digital tools to create their <mark onclick="openVocabModal('identity')" class="vocab-mark">identity</mark> in the modern world.</span>
+      </p>
+
+    </section>
+
+    <!-- NEXT STEP NAVIGATION BUTTON -->
+    <section class="w-full pt-1">
+      <button onclick="goToNextStep()" class="btn-brutal w-full py-3.5 bg-orange text-white font-arabic text-lg sm:text-xl font-black border-2 sm:border-3 border-navy shadow-brutal hover:bg-yellow hover:text-navy transition-all flex items-center justify-center gap-3">
+        <span>الانتقال للخطوة التالية: التحديات</span>
+        <span class="font-mono text-2xl">←</span>
+      </button>
+    </section>
+
+  </main>
+
+  <!-- FOOTER CREDIT -->
+  <footer class="w-full max-w-3xl text-center pt-3 pb-1 text-[11px] font-mono text-gray-600 flex justify-between items-center border-t border-gray-300" dir="ltr">
+    <span>PREP 2 • UNIT 1 LESSON 1</span>
+    <span class="font-bold text-navy">مغامرة جيل ألفا © 2026</span>
+  </footer>
+
+  <!-- VOCAB EXPLORATION MODAL CARD -->
+  <div id="vocabModal" class="fixed inset-0 bg-navy/80 backdrop-blur-none z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-cream border-3 border-navy shadow-brutal-lg w-full max-w-2xl p-5 sm:p-7 relative flex flex-col gap-4 scanlines animate-in fade-in zoom-in-95 duration-150 max-h-[90vh] overflow-y-auto">
+      
+      <!-- Modal Header Bar -->
+      <div class="flex justify-between items-center border-b-2 border-navy pb-2.5" dir="ltr">
+        <div class="flex items-center gap-2">
+          <span id="modalIcon" class="w-9 h-9 bg-cyan border border-navy flex items-center justify-center text-xl">💡</span>
+          <div>
+            <h2 id="modalWord" class="font-mono font-black text-xl text-navy">word</h2>
+            <span id="modalPhonetic" class="font-mono text-[11px] text-gray-600 block">/phonetic/</span>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-1.5">
+          <!-- Audio Pronounce Word Button -->
+          <button onclick="pronounceCurrentWord()" class="btn-brutal p-1.5 bg-yellow border border-navy text-xs" title="استمع للكلمة">
+            🔊
+          </button>
+          <!-- Close Modal -->
+          <button onclick="closeVocabModal()" class="btn-brutal w-7 h-7 bg-white border border-navy font-pixel text-xs text-navy flex items-center justify-center hover:bg-orange hover:text-white">
+            ✕
+          </button>
+        </div>
+      </div>
+      <img
+        id="vocabImage"
+        src="images/generation.jfif"
+        alt="Generation"
+     class="w-full h-64 sm:h-80 object-contain border-2 border-navy bg-white"
+      />
+      <!-- Arabic Meaning Display -->
+<div class="bg-lime/20 border-2 border-navy p-4 text-center">
+  <span class="text-sm font-mono text-emerald-800 font-bold block mb-2">
+    المعنى بالعربية:
+  </span>
+  <span id="modalArabic" class="font-arabic font-black text-lg text-navy">
+    المعنى العربي
+  </span>
+</div>
+    </div>
+  </div>
+  <!-- JAVASCRIPT: WEB SPEECH NARRATION, AUDIO SYNTH, AND VOCAB DATABASE -->
+  <script>
+    // --- 1. VOCABULARY DATABASE (12 TARGET WORDS) ---
+    const vocabData = {
+      "generation": {
+        word: "generation",
+        icon: "👥",
+        image: "images/generation.jfif",
+        phonetic: "/ˌdʒen.əˈreɪ.ʃən/",
+        sentence: "Today's young generation, Gen Alpha, is changing the way we live and communicate.",
+        arabic: "جيل (مجموعة من الناس في نفس العمر تقريباً)"
+      },
+      "digital natives": {
+        word: "digital natives",
+        icon: "💻",
+        phonetic: "/ˈdɪdʒ.ɪ.təl ˈneɪ.tɪvz/",
+        sentence: "They are digital natives, because they learn to use technology before they can read.",
+        arabic: "المواطنون الرقميون (من نشأوا في العصر الرقمي)"
+      },
+      "communicate": {
+        word: "communicate",
+        icon: "💬",
+        phonetic: "/kəˈmjuː.nə.keɪt/",
+        sentence: "...changing the way we live and communicate.",
+        arabic: "يتواصل / يتفاهم مع الآخرين"
+      },
+      "trends": {
+        word: "trends",
+        icon: "📈",
+        phonetic: "/trendz/",
+        sentence: "...exploring the latest trends.",
+        arabic: "اتجاهات سائدة / صيحات شعبية (تريندات)"
+      },
+      "hobbies": {
+        word: "hobbies",
+        icon: "🎨",
+        phonetic: "/ˈhɒb.iz/",
+        sentence: "They like creating short videos to show their hobbies or opinions.",
+        arabic: "هوايات"
+      },
+      "opinions": {
+        word: "opinions",
+        icon: "🗣️",
+        phonetic: "/əˈpɪn.jənz/",
+        sentence: "...to show their hobbies or opinions.",
+        arabic: "آراء / وجهات نظر"
+      },
+      "memes": {
+        word: "memes",
+        icon: "🎭",
+        phonetic: "/miːmz/",
+        sentence: "For example, they share memes and sometimes send emojis instead of words...",
+        arabic: "صور وفيديوهات ساخرة متداولة (كوميكس/ميمز)"
+      },
+      "emojis": {
+        word: "emojis",
+        icon: "🙂",
+        phonetic: "/ɪˈməʊ.dʒiz/",
+        sentence: "...and sometimes send emojis instead of words because they like showing emotions...",
+        arabic: "الرموز التعبيرية (الإيموجي)"
+      },
+      "screen time": {
+        word: "screen time",
+        icon: "⏳",
+        phonetic: "/ˈskriːn taɪm/",
+        sentence: "Right now, many parents are trying to limit screen time while encouraging digital skills.",
+        arabic: "زمن استخدام الشاشات والأجهزة الإلكترونية"
+      },
+      "balance": {
+        word: "balance",
+        icon: "⚖️",
+        phonetic: "/ˈbæl.əns/",
+        sentence: "...learning to balance online activities with real-life connections.",
+        arabic: "يوازن / تحقيق التوازن"
+      },
+      "real-life connections": {
+        word: "real-life connections",
+        icon: "🤝",
+        phonetic: "/rɪəl laɪf kəˈnek.ʃənz/",
+        sentence: "...balance online activities with real-life connections.",
+        arabic: "علاقات وتواصل في الحياة الواقعية"
+      },
+      "identity": {
+        word: "identity",
+        icon: "🆔",
+        phonetic: "/aɪˈden.tə.ti/",
+        sentence: "...likes using digital tools to create their identity in the modern world.",
+        arabic: "الهوية / الشخصية الذاتية"
+      }
+    };
+
+    // --- 2. SENTENCES BREAKDOWN FOR SYNCHRONIZED AUDIO ---
+    const sentencesList = [
+      "Do you know that you are one of Gen Alpha, who were born from around 2010 to the mid-2020s?",
+      "Today's young generation, Gen Alpha, is changing the way we live and communicate.",
+      "They are digital natives, because they learn to use technology before they can read, and they usually spend a lot of time online, exploring the latest trends.",
+      "They like creating short videos to show their hobbies or opinions.",
+      "At the moment, many Gen Alpha children are using social media to learn about the world and to connect with others.",
+      "They are constantly discovering new trends that quickly spread across their digital communities.",
+      "For example, they share memes and sometimes send emojis instead of words because they like showing emotions in a creative, fun way.",
+      "Teachers and parents often wonder how this generation will grow up with so much technology around them.",
+      "Right now, many parents are trying to limit screen time while also encouraging useful digital skills.",
+      "Gen Alpha rarely spends a day without using technology, but they are also learning to balance online activities with real-life connections.",
+      "This generation represents a powerful trend that is shaping the future.",
+      "Gen Alpha always looks for new ways to express themselves and likes using digital tools to create their identity in the modern world."
+    ];
+
+   
+// --- 3. MP3 AUDIO PLAYER (LISTEN & FOLLOW) ---
+
+const passageAudio = document.getElementById('passageAudio');
+
+let isPlaying = false;
+let isPaused = false;
+let playbackSpeed = 1.0;
+
+function toggleSpeech() {
+  playAudioSynth('click');
+
+  if (passageAudio.paused) {
+    passageAudio.play()
+      .then(() => {
+        isPlaying = true;
+        isPaused = false;
+        updateAudioUI(true);
+      })
+      .catch(error => {
+        console.error("Audio playback error:", error);
+        alert("مش قادرين نشغل الملف الصوتي. تأكدي من مكان الملف واسمه.");
+      });
+  } else {
+    passageAudio.pause();
+    isPaused = true;
+    updateAudioUI(false, "RESUME");
+  }
+}
+
+function stopSpeech() {
+  playAudioSynth('click');
+
+  passageAudio.pause();
+  passageAudio.currentTime = 0;
+
+  isPlaying = false;
+  isPaused = false;
+
+  clearSentenceHighlights();
+  updateAudioUI(false);
+}
+
+function setSpeed(speed, btnElement) {
+  playAudioSynth('blip');
+
+  playbackSpeed = speed;
+  passageAudio.playbackRate = speed;
+
+  document.querySelectorAll('.speed-btn').forEach(btn => {
+    btn.classList.remove('bg-yellow');
+  });
+
+  btnElement.classList.add('bg-yellow');
+}
+
+function updateAudioUI(active, label) {
+  const playIcon = document.getElementById('playIcon');
+  const playText = document.getElementById('playText');
+  const eqContainer = document.getElementById('eqContainer');
+
+  if (active) {
+    playIcon.textContent = '⏸';
+    playText.textContent = 'PAUSE';
+    eqContainer.classList.remove('hidden');
+  } else {
+    playIcon.textContent = '▶';
+    playText.textContent = label || 'PLAY';
+    eqContainer.classList.add('hidden');
+  }
+}
+
+// Update buttons when audio ends
+passageAudio.addEventListener('ended', () => {
+  isPlaying = false;
+  isPaused = false;
+  passageAudio.currentTime = 0;
+  updateAudioUI(false);
+});
+
+// Update UI if audio is paused
+passageAudio.addEventListener('pause', () => {
+  if (!passageAudio.ended && passageAudio.currentTime > 0) {
+    isPlaying = false;
+    isPaused = true;
+    updateAudioUI(false, "RESUME");
+  }
+});
+
+// Update UI when audio starts
+passageAudio.addEventListener('play', () => {
+  isPlaying = true;
+  isPaused = false;
+  updateAudioUI(true);
+});
+
+    // --- 4. VOCABULARY MODAL INTERACTIVITY ---
+    let activeVocabWord = "";
+
+    function openVocabModal(wordKey) {
+      playAudioSynth('blip');
+      const data = vocabData[wordKey];
+      if (!data) return;
+
+     activeVocabWord = data.word;
+document.getElementById('modalWord').textContent = data.word;
+document.getElementById('modalIcon').textContent = data.icon;
+
+const imageName = wordKey.toLowerCase().replaceAll(' ', '_');
+document.getElementById('vocabImage').src = `./images/${imageName}.jfif`;
+
+document.getElementById('modalPhonetic').textContent = data.phonetic;
+document.getElementById('modalArabic').textContent = data.arabic;
+      // Reset Reveal Arabic Box
+      document.getElementById('vocabModal').classList.remove('hidden');
+    }
+
+    function closeVocabModal() {
+      playAudioSynth('click');
+      document.getElementById('vocabModal').classList.add('hidden');
+    }
+function pronounceCurrentWord() {
+  if (!activeVocabWord) return;
+
+  // إيقاف التسجيل الأساسي لو شغال
+  passageAudio.pause();
+
+  // أسماء ملفات نطق الكلمات
+  const wordAudioFiles = {
+    "generation": "generation.mp3",
+    "digital natives": "digital natives.mp3",
+    "communicate": "communicate.mp3",
+    "trends": "trends.mp3",
+    "hobbies": "hobbies.mp3",
+    "opinions": "opinions.mp3",
+    "memes": "memes.mp3",
+    "emojis": "emojis.mp3",
+    "screen time": "screen time.mp3",
+    "balance": "balance.mp3",
+    "real-life connections": "real-life connections.mp3",
+    "identity": "identity.mp3"
+  };
+
+  const fileName = wordAudioFiles[activeVocabWord];
+
+  if (!fileName) return;
+
+  const wordAudio = new Audio("./audio/" + fileName);
+
+  wordAudio.play().catch(error => {
+    console.error("Word audio error:", error);
+    alert("تعذر تشغيل صوت الكلمة. تأكدي من وجود الملف.");
+  });
+}
+    // --- 5. WEB AUDIO SYNTHESIZER FOR RETRO SOUND EFFECTS ---
+    let audioCtx = null;
+    let audioMuted = false;
+
+    function initAudioSynth() {
+      if (!audioCtx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        audioCtx = new AudioContext();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    function playAudioSynth(type) {
+      if (audioMuted) return;
+      try {
+        initAudioSynth();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        const now = audioCtx.currentTime;
+
+        if (type === 'blip') {
+          osc.type = 'square';
+          osc.frequency.setValueAtTime(520, now);
+          osc.frequency.exponentialRampToValueAtTime(880, now + 0.08);
+          gain.gain.setValueAtTime(0.08, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+          osc.start(now);
+          osc.stop(now + 0.08);
+        } else if (type === 'click') {
+          osc.type = 'square';
+          osc.frequency.setValueAtTime(180, now);
+          gain.gain.setValueAtTime(0.08, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+          osc.start(now);
+          osc.stop(now + 0.05);
+        } else if (type === 'reveal') {
+          const notes = [330, 440, 554.37, 659.25];
+          notes.forEach((freq, idx) => {
+            const noteOsc = audioCtx.createOscillator();
+            const noteGain = audioCtx.createGain();
+            noteOsc.type = 'triangle';
+            noteOsc.frequency.setValueAtTime(freq, now + idx * 0.04);
+            noteGain.gain.setValueAtTime(0.1, now + idx * 0.04);
+            noteGain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.04 + 0.08);
+            noteOsc.connect(noteGain);
+            noteGain.connect(audioCtx.destination);
+            noteOsc.start(now + idx * 0.04);
+            noteOsc.stop(now + idx * 0.04 + 0.08);
+          });
+        }
+      } catch(e) {}
+    }
+
+    function toggleAudioSynth() {
+      audioMuted = !audioMuted;
+      document.getElementById('soundIcon').textContent = audioMuted ? '🔇' : '🔊';
+    }
+
+    // --- 6. NAVIGATION ROUTING ---
+    function goToWarmup() {
+      playAudioSynth('click');
+      window.location.href = 'l1-1-warmup.html';
+    }
+
+function goToNextStep() {
+    playAudioSynth('reveal');
+
+    window.location.href = 'l1-3-think-about-this.html';
+}
+  </script>
+</body>
+</html>

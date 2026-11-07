@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="h-full">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Think About This | Gen Alpha</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts: Cairo, Kufam, Silkscreen, Space Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800;900&family=Kufam:wght@700;800;900&family=Silkscreen:wght@400;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cream: '#FAF7F2',
+            navy: '#0E1726',
+            orange: '#FF5226',
+            cyan: '#00E5FF',
+            yellow: '#FFE800',
+            lime: '#10B981',
+            softRed: '#FF4D4D',
+          },
+          fontFamily: {
+            arabic: ['Kufam', 'Cairo', 'sans-serif'],
+            cairo: ['Cairo', 'sans-serif'],
+            pixel: ['Silkscreen', 'monospace'],
+            mono: ['Space Mono', 'monospace'],
+          },
+          boxShadow: {
+            'brutal-sm': '2px 2px 0px #0E1726',
+            'brutal': '4px 4px 0px #0E1726',
+            'brutal-lg': '5px 5px 0px #0E1726',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #FAF7F2;
+      color: #0E1726;
+      font-family: 'Cairo', sans-serif;
+      overflow-x: hidden;
+      background-image: radial-gradient(#0E1726 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+
+    .btn-brutal {
+      transition: all 0.1s ease-in-out;
+    }
+    .btn-brutal:active {
+      transform: translate(3px, 3px);
+      box-shadow: 1px 1px 0px #0E1726 !important;
+    }
+
+    .option-card {
+      transition: all 0.15s ease;
+    }
+    .option-card:hover {
+      transform: translateY(-2px);
+    }
+
+    /* Star Pop Animation */
+    @keyframes starPop {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.4) rotate(12deg); }
+      100% { transform: scale(1); }
+    }
+    .star-earned {
+      animation: starPop 0.4s ease-in-out forwards;
+      color: #FFE800 !important;
+      text-shadow: 2px 2px 0px #0E1726;
+    }
+  </style>
+  <script src="app.js"></script>
+</head>
+
+<body data-ga-page="l1-3" class="min-h-screen flex flex-col justify-between items-center p-3 sm:p-5 selection:bg-orange selection:text-cream">
+
+  <!-- TOP HEADER & AUDIO CONTROLS -->
+  <header class="w-full max-w-xl flex justify-between items-center bg-white border-2 border-navy p-2.5 sm:p-3 shadow-brutal z-20">
+    <div class="flex items-center gap-2" dir="ltr">
+      <span class="bg-cyan text-navy font-pixel text-[10px] sm:text-xs px-2 py-0.5 border border-navy font-bold">
+        UNIT 01 / LESSON 01
+      </span>
+    </div>
+
+    <div class="flex items-center gap-2">
+      <div class="bg-yellow text-navy font-pixel text-[11px] sm:text-xs px-2.5 py-0.5 border border-navy font-black shadow-brutal-sm" dir="ltr">
+        03 / 05
+      </div>
+      <button id="soundToggleBtn" onclick="toggleAudio()" class="btn-brutal p-1 bg-white border border-navy text-xs" title="الصوت">
+        <span id="soundIcon">🔊</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- MAIN THINK ABOUT THIS CONTAINER -->
+  <main class="w-full max-w-xl flex-1 flex flex-col justify-center items-center gap-4 py-3 my-auto">
+
+    <!-- TITLE & HEADING SECTION -->
+    <section class="w-full flex flex-col items-center text-center gap-1.5">
+      <!-- Badge Sticker -->
+      <div class="inline-flex items-center gap-1.5 bg-orange text-white border-2 border-navy px-3 py-0.5 shadow-brutal-sm font-pixel text-xs sm:text-sm font-bold rotate-[-1deg]" dir="ltr">
+        <span>⚡ THINK ABOUT THIS</span>
+      </div>
+
+      <h1 class="font-arabic font-black text-2xl sm:text-3xl text-navy flex items-center justify-center gap-2">
+        <span>اختبر فهمك لقطعة القراءة</span>
+        <span class="text-orange text-xl sm:text-2xl">🧠</span>
+      </h1>
+      <p class="font-arabic font-bold text-xs sm:text-sm text-gray-700">
+        أجب عن الأسئلة الخمسة واجمع النجوم الذهبية لتجاوز المستوى!
+      </p>
+    </section>
+
+    <!-- 5-STAR PROGRESS BAR BAR -->
+    <section class="w-full bg-white border-2 sm:border-3 border-navy p-3 shadow-brutal flex flex-col gap-1.5">
+      <div class="flex justify-between items-center text-xs font-bold font-mono">
+        <span class="text-navy font-arabic">معدل الإنجاز:</span>
+        <span id="starCounter" class="text-orange font-pixel">0 / 5 STARS</span>
+      </div>
+
+      <!-- Stars Display -->
+      <div class="flex justify-around items-center bg-cream border-2 border-navy p-2" dir="ltr">
+        <span id="star-0" class="text-2xl sm:text-3xl text-gray-300 transition-all">★</span>
+        <span id="star-1" class="text-2xl sm:text-3xl text-gray-300 transition-all">★</span>
+        <span id="star-2" class="text-2xl sm:text-3xl text-gray-300 transition-all">★</span>
+        <span id="star-3" class="text-2xl sm:text-3xl text-gray-300 transition-all">★</span>
+        <span id="star-4" class="text-2xl sm:text-3xl text-gray-300 transition-all">★</span>
+      </div>
+    </section>
+
+    <!-- QUESTION CARD CONTAINER -->
+    <section class="w-full bg-white border-2 sm:border-3 border-navy p-4 sm:p-5 shadow-brutal flex flex-col gap-3 relative">
+      
+      <!-- Question Header Bar -->
+      <div class="flex justify-between items-center border-b-2 border-navy pb-2" dir="ltr">
+        <span id="qIndexBadge" class="bg-navy text-cyan font-pixel text-[10px] sm:text-xs px-2 py-0.5 border border-navy font-bold">
+          QUESTION 01 OF 05
+        </span>
+        <span class="font-mono text-xs font-bold text-navy">READING COMPREHENSION</span>
+      </div>
+
+      <!-- Question Text Prompt -->
+      <div id="qPromptBox" class="bg-yellow border-2 border-navy p-3 sm:p-3.5 text-navy font-black text-sm sm:text-base md:text-lg leading-snug" dir="ltr">
+        <!-- Dynamic Question Text -->
+      </div>
+
+      <!-- Options Container -->
+      <div id="optionsContainer" class="flex flex-col gap-2.5 mt-1" dir="ltr">
+        <!-- Dynamic Option Buttons -->
+      </div>
+    </section>
+
+    <!-- CONSTRUCTIVE FEEDBACK PANEL -->
+    <section id="feedbackPanel" class="w-full bg-white border-2 border-navy p-3 sm:p-4 shadow-brutal hidden transition-all">
+      <div class="flex items-start gap-3">
+        <div id="mascotIcon" class="w-9 h-9 bg-cyan border border-navy flex items-center justify-center text-lg flex-shrink-0">
+          🤖
+        </div>
+
+        <div class="flex-1 space-y-0.5">
+          <div id="feedbackHeader" class="font-arabic font-black text-sm flex items-center gap-2">
+            <!-- Dynamic Feedback Title -->
+          </div>
+          <p id="feedbackBody" class="font-arabic font-semibold text-xs sm:text-sm text-navy leading-relaxed">
+            <!-- Dynamic Feedback Explanation -->
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- NEXT QUESTION / FINISH BUTTON -->
+    <section class="w-full pt-1">
+      <button id="nextBtn" onclick="handleNextQuestion()" disabled class="btn-brutal w-full py-3.5 bg-gray-300 text-gray-500 font-arabic text-base sm:text-lg font-black border-2 border-navy shadow-brutal cursor-not-allowed flex items-center justify-center gap-2">
+        <span id="nextBtnText">السؤال التالي</span>
+        <span class="font-mono text-xl">←</span>
+      </button>
+    </section>
+
+  </main>
+
+  <!-- COMPLETION CONGRATULATIONS MODAL -->
+  <div id="completionModal" class="fixed inset-0 bg-navy/80 backdrop-blur-none z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-cream border-3 border-navy shadow-brutal-lg w-full max-w-md p-5 relative flex flex-col items-center text-center gap-4">
+      
+      <!-- Trophy Banner -->
+      <div class="w-16 h-16 bg-yellow border-2 border-navy flex items-center justify-center text-3xl shadow-brutal-sm -mt-10 rotate-[-2deg]">
+        🏆
+      </div>
+
+      <div class="space-y-1">
+        <h2 id="congratsTitle" class="font-arabic font-black text-2xl sm:text-3xl text-navy">
+          Amazing! You earned 5 stars! 🎉
+        </h2>
+        <p id="congratsSub" class="font-arabic font-bold text-sm text-gray-700">
+          لقد أتقنت فهم قطعة القراءة بنجاح واستوعبت مفاهيم Gen Alpha!
+        </p>
+      </div>
+
+      <!-- Earned Stars Showcase -->
+      <div id="finalStarsBox" class="flex justify-center gap-2 bg-white border-2 border-navy p-3 w-full text-3xl text-yellow" dir="ltr">
+        <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+      </div>
+
+      <!-- ACTION BUTTONS SECTION (RETRY BUTTON ON THE RIGHT) -->
+      <div class="flex flex-col sm:flex-row gap-2.5 w-full pt-1">
+        <!-- Retry Quiz Button (Right Side in RTL) -->
+        <button onclick="restartQuiz()" class="btn-brutal px-4 py-3.5 bg-white text-navy font-arabic font-bold text-sm border-2 border-navy shadow-brutal hover:bg-yellow transition-all">
+          إعادة الاختبار 🔄
+        </button>
+
+        <!-- Next Challenge Button (Left Side in RTL) -->
+        <button onclick="goToVocabularyChallenge()" class="btn-brutal flex-1 py-3.5 bg-cyan text-navy font-arabic font-black text-base border-2 border-navy shadow-brutal hover:bg-lime transition-all flex items-center justify-center gap-2">
+          <span>Vocabulary Challenge</span>
+          <span class="font-mono text-xl">←</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="w-full max-w-xl text-center pt-2 pb-1 text-[11px] font-mono text-gray-600 flex justify-between items-center border-t border-gray-300" dir="ltr">
+    <span>LESSON 01 • THINK ABOUT THIS</span>
+    <span class="font-bold text-navy">مغامرة جيل ألفا © 2026</span>
+  </footer>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    // --- 5 COMPREHENSION QUESTIONS DATA ---
+    const questionsData = [
+      {
+        prompt: "When were members of Gen Alpha born?",
+        options: [
+          { letter: "A", text: "From around 2010 to the mid-2020s.", correct: true },
+          { letter: "B", text: "In the late 1990s.", correct: false },
+          { letter: "C", text: "Before the year 2000.", correct: false }
+        ],
+        explanation: "ولد جيل ألفا تقريباً بين عام 2010 ومنتصف العشرينيات (mid-2020s)، ولذلك يعتبرون جيل التكنولوجيا الحديثة."
+      },
+      {
+        prompt: "Why are Gen Alpha called “digital natives”?",
+        options: [
+          { letter: "A", text: "Because they do not use smartphones or tablets.", correct: false },
+          { letter: "B", text: "Because they learn to use technology before they can read.", correct: true },
+          { letter: "C", text: "Because they only read printed storybooks.", correct: false }
+        ],
+        explanation: "يُطلق عليهم Digital Natives لأنهم يتعلمون استخدام الأجهزة والتكنولوجيا حتى قبل تعلم القراءة!"
+      },
+      {
+        prompt: "Why do Gen Alpha share memes and emojis according to the text?",
+        options: [
+          { letter: "A", text: "To show emotions in a creative, fun way.", correct: true },
+          { letter: "B", text: "Because they don't like using social media.", correct: false },
+          { letter: "C", text: "Because emojis are difficult to understand.", correct: false }
+        ],
+        explanation: "يستخدم جيل ألفا الصور الساخرة (Memes) والرموز التعبيرية (Emojis) للتعبير عن مشاعرهم بطريقة مبتكرة وممتعة."
+      },
+      {
+        prompt: "What are many parents trying to do right now regarding screen time?",
+        options: [
+          { letter: "A", text: "Encourage spending 24 hours on screens.", correct: false },
+          { letter: "B", text: "Ban technology completely from homes.", correct: false },
+          { letter: "C", text: "Limit screen time while encouraging useful digital skills.", correct: true }
+        ],
+        explanation: "يحاول أولياء الأمور تقليل وقت الشاشة (Limit screen time) وفي نفس الوقت تشجيع المهارات الرقمية المفيدة."
+      },
+      {
+        prompt: "How does Gen Alpha use digital tools to express themselves?",
+        options: [
+          { letter: "A", text: "They use digital tools to create their identity in the modern world.", correct: true },
+          { letter: "B", text: "They stop communicating with their real-life friends.", correct: false },
+          { letter: "C", text: "They avoid discovering new trends online.", correct: false }
+        ],
+        explanation: "يستخدم جيل ألفا الأدوات الرقمية لبناء هويتهم (Identity) والتعبير عن أنفسهم في العالم الحديث."
+      }
+    ];
+
+    let currentQIndex = 0;
+    let earnedStarsCount = 0;
+    let answeredCurrent = false;
+
+    // --- WEB AUDIO SYNTHESIZER ---
+    let audioCtx = null;
+    let audioMuted = false;
+
+    function initAudio() {
+      if (!audioCtx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        audioCtx = new AudioContext();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    function playAudio(type) {
+      if (audioMuted) return;
+      try {
+        initAudio();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        const now = audioCtx.currentTime;
+
+        if (type === 'correct') {
+          const notes = [523.25, 659.25, 783.99, 1046.50];
+          notes.forEach((freq, idx) => {
+            const noteOsc = audioCtx.createOscillator();
+            const noteGain = audioCtx.createGain();
+            noteOsc.type = 'square';
+            noteOsc.frequency.setValueAtTime(freq, now + idx * 0.06);
+            noteGain.gain.setValueAtTime(0.1, now + idx * 0.06);
+            noteGain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.06 + 0.12);
+            noteOsc.connect(noteGain);
+            noteGain.connect(audioCtx.destination);
+            noteOsc.start(now + idx * 0.06);
+            noteOsc.stop(now + idx * 0.06 + 0.12);
+          });
+        } else if (type === 'wrong') {
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(200, now);
+          osc.frequency.exponentialRampToValueAtTime(140, now + 0.15);
+          gain.gain.setValueAtTime(0.12, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+          osc.start(now);
+          osc.stop(now + 0.15);
+        } else if (type === 'fanfare') {
+          const notes = [261.63, 329.63, 392.00, 523.25, 659.25, 783.99];
+          notes.forEach((freq, idx) => {
+            const noteOsc = audioCtx.createOscillator();
+            const noteGain = audioCtx.createGain();
+            noteOsc.type = 'triangle';
+            noteOsc.frequency.setValueAtTime(freq, now + idx * 0.08);
+            noteGain.gain.setValueAtTime(0.15, now + idx * 0.08);
+            noteGain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.2);
+            noteOsc.connect(noteGain);
+            noteGain.connect(audioCtx.destination);
+            noteOsc.start(now + idx * 0.08);
+            noteOsc.stop(now + idx * 0.08 + 0.2);
+          });
+        }
+      } catch(e) {}
+    }
+
+    function toggleAudio() {
+      audioMuted = !audioMuted;
+      document.getElementById('soundIcon').textContent = audioMuted ? '🔇' : '🔊';
+    }
+
+    // --- RENDER CURRENT QUESTION ---
+    function renderQuestion() {
+      answeredCurrent = false;
+      const q = questionsData[currentQIndex];
+
+      document.getElementById('qIndexBadge').textContent = `QUESTION 0${currentQIndex + 1} OF 05`;
+      document.getElementById('qPromptBox').textContent = q.prompt;
+
+      const optionsContainer = document.getElementById('optionsContainer');
+      optionsContainer.innerHTML = '';
+
+      q.options.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.id = `optBtn_${idx}`;
+        btn.className = 'option-card btn-brutal w-full p-3 bg-cream border-2 border-navy text-left flex items-center gap-3 shadow-brutal-sm hover:bg-cyan/20 group';
+        btn.onclick = () => selectOption(idx);
+
+        btn.innerHTML = `
+          <span class="w-7 h-7 sm:w-8 sm:h-8 bg-navy text-cream font-pixel text-xs sm:text-sm flex items-center justify-center border border-navy group-hover:bg-orange group-hover:text-white flex-shrink-0 font-bold">
+            ${opt.letter}
+          </span>
+          <span class="font-mono font-bold text-xs sm:text-sm text-navy leading-snug">
+            ${opt.text}
+          </span>
+        `;
+        optionsContainer.appendChild(btn);
+      });
+
+      // Reset Feedback & Next Button
+      document.getElementById('feedbackPanel').classList.add('hidden');
+      const nextBtn = document.getElementById('nextBtn');
+      nextBtn.disabled = true;
+      nextBtn.className = 'btn-brutal w-full py-3.5 bg-gray-300 text-gray-500 font-arabic text-base sm:text-lg font-black border-2 border-navy shadow-brutal cursor-not-allowed flex items-center justify-center gap-2';
+      
+      document.getElementById('nextBtnText').textContent = (currentQIndex === 4) ? "عرض النتيجة النهائية" : "السؤال التالي";
+    }
+
+    // --- HANDLE ANSWER SELECTION ---
+    function selectOption(optIdx) {
+      if (answeredCurrent) return;
+      answeredCurrent = true;
+
+      const q = questionsData[currentQIndex];
+      const selected = q.options[optIdx];
+      const feedbackPanel = document.getElementById('feedbackPanel');
+      const feedbackHeader = document.getElementById('feedbackHeader');
+      const feedbackBody = document.getElementById('feedbackBody');
+      const mascotIcon = document.getElementById('mascotIcon');
+
+      // Highlight selected option
+      q.options.forEach((opt, idx) => {
+        const btn = document.getElementById(`optBtn_${idx}`);
+        if (opt.correct) {
+          btn.classList.add('bg-lime/30', 'border-lime');
+        } else if (idx === optIdx) {
+          btn.classList.add('bg-orange/20', 'border-orange');
+        }
+      });
+
+      feedbackPanel.classList.remove('hidden');
+
+      if (selected.correct) {
+        playAudio('correct');
+        // Award Star
+        const starElem = document.getElementById(`star-${earnedStarsCount}`);
+        if (starElem) {
+          starElem.classList.add('star-earned');
+        }
+        earnedStarsCount++;
+        document.getElementById('starCounter').textContent = `${earnedStarsCount} / 5 STARS`;
+
+        mascotIcon.textContent = '🌟';
+        mascotIcon.className = 'w-9 h-9 bg-lime border border-navy flex items-center justify-center text-lg flex-shrink-0';
+
+        feedbackHeader.className = 'font-arabic font-black text-sm text-emerald-800 flex items-center gap-2';
+        feedbackHeader.innerHTML = '<span>إجابة صحيحة! حصلت على نجمة ذهبية ⭐</span>';
+        feedbackBody.textContent = q.explanation;
+
+      } else {
+        playAudio('wrong');
+        mascotIcon.textContent = '💡';
+        mascotIcon.className = 'w-9 h-9 bg-yellow border border-navy flex items-center justify-center text-lg flex-shrink-0';
+
+        feedbackHeader.className = 'font-arabic font-black text-sm text-navy flex items-center gap-2';
+        feedbackHeader.innerHTML = '<span>إجابة غير دقيقة! إليك التوضيح الصحيح:</span>';
+        feedbackBody.textContent = q.explanation;
+      }
+
+      // Unlock Next Button
+      const nextBtn = document.getElementById('nextBtn');
+      nextBtn.disabled = false;
+      nextBtn.className = 'btn-brutal w-full py-3.5 bg-orange text-white font-arabic text-base sm:text-lg font-black border-2 border-navy shadow-brutal hover:bg-yellow hover:text-navy cursor-pointer flex items-center justify-center gap-2';
+    }
+
+    // --- NEXT QUESTION OR FINISH ---
+    function handleNextQuestion() {
+      if (currentQIndex < 4) {
+        currentQIndex++;
+        renderQuestion();
+      } else {
+        showCompletionModal();
+      }
+    }
+
+    // --- SHOW FINAL RESULTS ---
+    function showCompletionModal() {
+      playAudio('fanfare');
+      const modal = document.getElementById('completionModal');
+      const congratsTitle = document.getElementById('congratsTitle');
+      const congratsSub = document.getElementById('congratsSub');
+      const finalStarsBox = document.getElementById('finalStarsBox');
+
+      finalStarsBox.innerHTML = '';
+      for (let i = 0; i < 5; i++) {
+        const star = document.createElement('span');
+        star.textContent = '★';
+        star.className = (i < earnedStarsCount) ? 'text-yellow text-4xl' : 'text-gray-300 text-4xl';
+        finalStarsBox.appendChild(star);
+      }
+
+      if (earnedStarsCount === 5) {
+        congratsTitle.textContent = "Amazing! You earned 5 stars! 🎉";
+        congratsSub.textContent = "ممتاز جداً! لقد أجبت على جميع الأسئلة إجابة صحيحة واستوعبت درس Gen Alpha كاملاً.";
+      } else {
+        congratsTitle.textContent = `Great Job! You earned ${earnedStarsCount} stars! 🌟`;
+        congratsSub.textContent = `أحسنت صنعاً! نجحت في فهم النص والحصول على ${earnedStarsCount} نجوم من 5.`;
+      }
+
+      modal.classList.remove('hidden');
+    }
+
+    function restartQuiz() {
+      currentQIndex = 0;
+      earnedStarsCount = 0;
+      document.getElementById('starCounter').textContent = `0 / 5 STARS`;
+
+      for (let i = 0; i < 5; i++) {
+        const starElem = document.getElementById(`star-${i}`);
+        if (starElem) {
+          starElem.className = 'text-2xl sm:text-3xl text-gray-300 transition-all';
+        }
+      }
+
+      document.getElementById('completionModal').classList.add('hidden');
+      renderQuestion();
+    }
+
+    // --- GO TO NEXT SECTION FUNCTION ---
+    function goToVocabularyChallenge() {
+      playAudio('fanfare');
+      window.location.href = 'l1-4-vocabulary-challenge.html';
+    }
+
+    // Initialize First Question
+    renderQuestion();
+  </script>
+</body>
+</html>

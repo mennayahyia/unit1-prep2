@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="h-full">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>إحصائياتي | مغامرة جيل ألفا</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts: Cairo, Kufam, Silkscreen, Space Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;900&family=Kufam:wght@700;800;900&family=Silkscreen:wght@400;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cream: '#FAF7F2',
+            navy: '#0E1726',
+            orange: '#FF5226',
+            cyan: '#00E5FF',
+            yellow: '#FFE800',
+            lime: '#10B981',
+          },
+          fontFamily: {
+            arabic: ['Kufam', 'Cairo', 'sans-serif'],
+            cairo: ['Cairo', 'sans-serif'],
+            pixel: ['Silkscreen', 'monospace'],
+            mono: ['Space Mono', 'monospace'],
+          },
+          boxShadow: {
+            'brutal-sm': '2px 2px 0px #0E1726',
+            'brutal': '4px 4px 0px #0E1726',
+            'brutal-lg': '6px 6px 0px #0E1726',
+            'brutal-orange': '4px 4px 0px #FF5226',
+            'brutal-cyan': '4px 4px 0px #00E5FF',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #FAF7F2;
+      color: #0E1726;
+      font-family: 'Cairo', sans-serif;
+      overflow-x: hidden;
+      background-image: radial-gradient(#0E1726 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+
+    .btn-brutal {
+      transition: all 0.1s ease-in-out;
+    }
+    .btn-brutal:active {
+      transform: translate(3px, 3px);
+      box-shadow: 1px 1px 0px #0E1726 !important;
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0E1726;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #00E5FF;
+    }
+  </style>
+  <script src="app.js"></script>
+</head>
+<body data-ga-bar="off" class="min-h-screen flex flex-col items-center gap-4 p-4 sm:p-6 selection:bg-orange selection:text-cream">
+  <header class="w-full max-w-2xl flex justify-between items-center bg-white border-2 sm:border-3 border-navy p-2.5 sm:p-3 shadow-brutal z-20">
+    <div class="flex items-center gap-2.5">
+      <div id="userAvatarContainer" class="relative group cursor-pointer">
+        <div id="avatarCircle" class="w-8 h-8 sm:w-9 sm:h-9 bg-yellow border-2 border-navy rounded-full flex items-center justify-center font-black text-xs sm:text-sm shadow-brutal-sm text-navy uppercase">👤</div>
+        <span id="userRoleBadge" class="hidden absolute -bottom-1 -right-1 bg-cyan text-navy border border-navy text-[8px] font-mono px-1 font-bold">STD</span>
+      </div>
+      <div class="flex flex-col">
+        <span class="font-pixel text-[9px] sm:text-[11px] tracking-wider text-navy font-bold uppercase" dir="ltr">ENGLISH • PREP 2</span>
+        <span id="headerUserName" class="font-arabic text-[11px] font-bold text-orange truncate max-w-[100px] sm:max-w-[140px]">زائر</span>
+      </div>
+    </div>
+    <div class="flex items-center gap-2 sm:gap-3" dir="ltr">
+      <div id="clock" class="font-pixel text-[10px] sm:text-xs text-navy bg-cream px-2 py-0.5 border border-navy font-bold">00:00:00</div>
+      <a href="contents.html" class="btn-brutal px-2 py-1 bg-yellow border border-navy shadow-brutal-sm text-navy font-arabic font-black text-[11px] sm:text-xs hover:bg-cyan">📚 <span class="hidden sm:inline">الفهرس</span></a>
+    </div>
+  </header>
+
+  <main class="w-full max-w-2xl flex-1 flex flex-col gap-4 py-2">
+    <section class="w-full text-center flex flex-col items-center gap-2">
+      <div class="inline-flex items-center gap-1.5 bg-cyan text-navy border-2 border-navy px-3.5 py-1 shadow-brutal-sm font-mono text-xs font-bold rotate-[-1deg]" dir="ltr"><span>📊 MY_STATS</span></div>
+      <h1 class="font-arabic text-3xl sm:text-4xl font-black text-navy">إحصائياتي</h1>
+      <p id="who" class="font-arabic text-sm font-bold text-gray-700"></p>
+    </section>
+
+    <section class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      <div class="bg-white border-2 border-navy shadow-brutal p-3 text-center"><div class="font-pixel text-xl text-orange" id="kPct" dir="ltr">0%</div><div class="font-arabic text-[11px] font-bold">التقدم</div></div>
+      <div class="bg-white border-2 border-navy shadow-brutal p-3 text-center"><div class="font-pixel text-xl text-lime" id="kDone" dir="ltr">0/0</div><div class="font-arabic text-[11px] font-bold">صفحات خلصتها</div></div>
+      <div class="bg-white border-2 border-navy shadow-brutal p-3 text-center"><div class="font-pixel text-xl text-navy" id="kStars" dir="ltr">0/0</div><div class="font-arabic text-[11px] font-bold">النقاط ⭐</div></div>
+      <div class="bg-white border-2 border-navy shadow-brutal p-3 text-center"><div class="font-pixel text-xl text-navy" id="kTime" dir="ltr">0</div><div class="font-arabic text-[11px] font-bold">الوقت ⏱</div></div>
+    </section>
+
+    <section class="bg-white border-3 border-navy shadow-brutal p-4 flex flex-col gap-2">
+      <div class="w-full h-4 bg-cream border-2 border-navy"><div id="bar" class="h-full bg-lime" style="width:0%"></div></div>
+      <div id="where" class="font-arabic text-sm font-bold text-navy"></div>
+      <div id="skipBox" class="hidden bg-orange/20 border-2 border-orange text-orange font-arabic text-xs font-bold p-2.5"></div>
+      <a id="resumeBtn" href="contents.html" class="btn-brutal w-full py-3 text-center no-underline bg-orange text-white font-arabic font-black text-base border-2 border-navy shadow-brutal hover:bg-yellow hover:text-navy">▶ كمّل من حيث توقفت</a>
+    </section>
+
+    <section id="finalBox" class="bg-white border-3 border-navy shadow-brutal p-4 flex items-center gap-3"></section>
+
+    <h2 class="font-arabic font-black text-xl text-navy">تفاصيل كل درس وكل صفحة <span class="text-xs font-bold text-gray-500">(اضغط على الصفحة لمشاهدة إجاباتك)</span></h2>
+    <div id="report"></div>
+
+    <section class="flex flex-wrap gap-2 pt-2">
+      <button onclick="exportMine()" class="btn-brutal px-3 py-2 bg-cyan text-navy font-arabic font-black text-xs border-2 border-navy shadow-brutal-sm hover:bg-lime">⬇️ تحميل ملف تقدمي (لإرساله للمعلم)</button>
+      <button onclick="GA.logout()" class="btn-brutal px-3 py-2 bg-white text-navy font-arabic font-black text-xs border-2 border-navy shadow-brutal-sm hover:bg-orange hover:text-white">🚪 تسجيل الخروج</button>
+    </section>
+    <p id="syncNote" class="font-arabic text-[11px] text-gray-600 font-bold"></p>
+  </main>
+
+  <footer class="w-full max-w-2xl text-center pt-3 pb-1 text-[11px] sm:text-xs font-mono text-gray-600 flex justify-between items-center border-t border-gray-300" dir="ltr">
+    <span>PREP 2 • UNIT 1 DIGI-QUEST</span>
+    <span class="font-bold text-navy">مغامرة جيل ألفا © 2026</span>
+  </footer>
+
+  <script>
+    function updateClock(){const n=new Date(),p=v=>String(v).padStart(2,'0');const c=document.getElementById('clock');if(c)c.textContent=p(n.getHours())+':'+p(n.getMinutes())+':'+p(n.getSeconds());}
+    setInterval(updateClock,1000);updateClock();
+    GA.fillHeader();
+    const s = GA.session(), r = GA.me() || { pages: {}, name: s.name };
+    const pr = GA.progress(r), sc = GA.stars(r);
+    document.getElementById('who').textContent = 'الطالب: ' + s.name;
+    document.getElementById('kPct').textContent = pr.pct + '%';
+    document.getElementById('kDone').textContent = pr.done + '/' + pr.total;
+    document.getElementById('kStars').textContent = sc.got + '/' + sc.max;
+    let t = 0; GA.PAGES.forEach(p => { t += (r.pages[p.id] && r.pages[p.id].time) || 0; });
+    document.getElementById('kTime').textContent = t < 60 ? t + 's' : Math.round(t / 60) + 'm';
+    document.getElementById('bar').style.width = pr.pct + '%';
+
+    const f = GA.furthestPage(r);
+    document.getElementById('where').textContent = f ? ('📍 وصلت إلى: الدرس ' + f.lesson + ' — ' + f.ar) : '📍 لسه ما بدأتش أي صفحة';
+    const sk = GA.skippedList(r);
+    if (sk.length) {
+      const b = document.getElementById('skipBox');
+      b.textContent = '⏭️ صفحات تخطيتها ولازم ترجعلها (' + sk.length + '): ' + sk.map(p => 'الدرس ' + p.lesson + ' ← ' + p.ar).join(' ، ');
+      b.classList.remove('hidden');
+    }
+    // أول درس مفتوح لم يكتمل
+    let target = null;
+    for (let li = 0; li < GA.LESSONS.length; li++) { if (GA.unlocked(r, li) && !GA.lessonDone(r, li)) { target = GA.resumePage(r, li); break; } }
+    const rb = document.getElementById('resumeBtn');
+    if (target) { rb.href = target.file; rb.textContent = '▶ كمّل: ' + target.ar; }
+    else { rb.textContent = '🏆 خلّصت الوحدة بالكامل — ارجع للفهرس'; }
+
+    const fin = GA.finalResult(r), fb = document.getElementById('finalBox');
+    if (fin && fin.score) {
+      fb.innerHTML = '<div class="w-14 h-14 shrink-0 bg-yellow border-2 border-navy flex items-center justify-center text-3xl shadow-brutal-sm">🏆</div><div class="flex-1"><div class="font-arabic font-black text-navy">الاختبار النهائي</div><div class="font-arabic text-xs font-bold text-gray-600">أُنجز ' + GA.ago(fin.completedAt) + '</div></div><div class="font-pixel text-2xl text-orange" dir="ltr">' + fin.score.got + ' / ' + fin.score.max + '</div>';
+    } else {
+      fb.innerHTML = '<div class="w-14 h-14 shrink-0 bg-gray-200 border-2 border-navy flex items-center justify-center text-3xl">🔒</div><div class="flex-1"><div class="font-arabic font-black text-navy">الاختبار النهائي</div><div class="font-arabic text-xs font-bold text-gray-600">لسه ما أديتهوش — هتلاقيه في آخر الدرس 6 (Assessment Corner)</div></div>';
+    }
+    document.getElementById('report').innerHTML = GA.report(r, {});
+
+    function exportMine() {
+      const d = {}; d[s.id] = GA.db()[s.id] || r;
+      GA.download('progress-' + s.id + '.json', JSON.stringify(d, null, 1), 'application/json');
+    }
+    document.getElementById('syncNote').textContent = GA.syncOn()
+      ? '☁️ تقدمك بيتحفظ تلقائياً ويظهر للمعلم.'
+      : 'ℹ️ تقدمك محفوظ على هذا الجهاز/المتصفح. لو المعلم على جهاز تاني: حمّل ملف تقدمك وابعتهوله.';
+  </script>
+</body>
+</html>

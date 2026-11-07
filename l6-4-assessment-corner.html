@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="h-full">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Assessment Corner | Lesson 06</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts: Cairo, Kufam, Silkscreen, Space Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800;900&family=Kufam:wght@700;800;900&family=Silkscreen:wght@400;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cream: '#FAF7F2',
+            navy: '#0E1726',
+            orange: '#FF5226',
+            cyan: '#00E5FF',
+            yellow: '#FFE800',
+            lime: '#10B981',
+          },
+          fontFamily: {
+            arabic: ['Cairo', 'Kufam', 'sans-serif'],
+            pixel: ['Silkscreen', 'monospace'],
+            mono: ['Space Mono', 'monospace'],
+          },
+          boxShadow: {
+            'brutal-sm': '2px 2px 0px #0E1726',
+            'brutal': '4px 4px 0px #0E1726',
+            'brutal-lg': '5px 5px 0px #0E1726',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #FAF7F2;
+      color: #0E1726;
+      font-family: 'Cairo', sans-serif;
+      overflow-x: hidden;
+      background-image: radial-gradient(#0E1726 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+
+    .btn-brutal {
+      transition: all 0.1s ease-in-out;
+    }
+    .btn-brutal:active {
+      transform: translate(2px, 2px);
+      box-shadow: 1px 1px 0px #0E1726 !important;
+    }
+
+    /* ===== شاشة النهاية الاحتفالية ===== */
+    #celebration { background: radial-gradient(circle at 50% 25%, #23386b 0%, #0E1726 68%); }
+    .cel-card { animation: celPop .6s cubic-bezier(.2,1.4,.4,1) both; }
+    @keyframes celPop { 0% { transform: scale(.6) translateY(40px); opacity: 0; } 100% { transform: scale(1) translateY(0); opacity: 1; } }
+    .cel-rays { position: absolute; inset: -34px; border-radius: 9999px; background: conic-gradient(from 0deg, #FFE800 0 10deg, transparent 10deg 30deg, #FFE800 30deg 40deg, transparent 40deg 60deg, #FFE800 60deg 70deg, transparent 70deg 90deg, #FFE800 90deg 100deg, transparent 100deg 120deg, #FFE800 120deg 130deg, transparent 130deg 150deg, #FFE800 150deg 160deg, transparent 160deg 180deg, #FFE800 180deg 190deg, transparent 190deg 210deg, #FFE800 210deg 220deg, transparent 220deg 240deg, #FFE800 240deg 250deg, transparent 250deg 270deg, #FFE800 270deg 280deg, transparent 280deg 300deg, #FFE800 300deg 310deg, transparent 310deg 330deg, #FFE800 330deg 340deg, transparent 340deg 360deg); -webkit-mask: radial-gradient(circle, transparent 38%, #000 40%, transparent 72%); mask: radial-gradient(circle, transparent 38%, #000 40%, transparent 72%); opacity: .55; animation: celSpin 14s linear infinite; }
+    @keyframes celSpin { to { transform: rotate(360deg); } }
+    .cel-trophy { animation: celBounce 1.6s ease-in-out infinite; display: inline-block; filter: drop-shadow(3px 4px 0 #0E1726); }
+    @keyframes celBounce { 0%,100% { transform: translateY(0) rotate(-4deg) scale(1); } 50% { transform: translateY(-12px) rotate(4deg) scale(1.08); } }
+    .cel-letter { display: inline-block; opacity: 0; animation: celLetter .5s cubic-bezier(.2,1.6,.4,1) forwards; }
+    @keyframes celLetter { 0% { opacity: 0; transform: translateY(24px) scale(.3) rotate(-12deg); } 100% { opacity: 1; transform: translateY(0) scale(1) rotate(0); } }
+    .cel-star { display: inline-block; color: #CBD5E1; font-size: 40px; line-height: 1; transition: color .3s; text-shadow: 2px 2px 0 #0E1726; }
+    .cel-star.on { color: #FFE800; animation: celStar .6s cubic-bezier(.2,1.8,.4,1); }
+    @keyframes celStar { 0% { transform: scale(0) rotate(-90deg); } 70% { transform: scale(1.5) rotate(15deg); } 100% { transform: scale(1) rotate(0); } }
+    .cel-float { position: fixed; bottom: -50px; font-size: 26px; opacity: 0; pointer-events: none; z-index: 1; animation: celFloat linear infinite; }
+    @keyframes celFloat { 0% { transform: translateY(0) rotate(0); opacity: 0; } 10% { opacity: .9; } 100% { transform: translateY(-110vh) rotate(40deg); opacity: 0; } }
+    .cel-rise { opacity: 0; animation: celRise .6s ease-out forwards; }
+    @keyframes celRise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+    @media (prefers-reduced-motion: reduce) { .cel-rays, .cel-trophy, .cel-float { animation: none; } .cel-letter, .cel-rise, .cel-card { animation-duration: .01s; } }
+  </style>
+  <script src="app.js"></script>
+</head>
+
+<body data-ga-page="l6-4" class="min-h-screen flex flex-col justify-between items-center p-3 sm:p-5 selection:bg-orange selection:text-cream">
+
+  <!-- TOP HEADER -->
+  <header class="w-full max-w-2xl flex justify-between items-center bg-white border-2 border-navy p-2.5 sm:p-3 shadow-brutal z-20">
+    <div class="flex items-center gap-2" dir="ltr">
+      <span class="bg-cyan text-navy font-pixel text-[10px] sm:text-xs px-2 py-0.5 border border-navy font-bold">
+        LESSON 06 / ASSESSMENT CORNER
+      </span>
+    </div>
+
+    <div class="flex items-center gap-2 sm:gap-3" dir="ltr">
+      <div class="bg-yellow text-navy font-pixel text-[10px] sm:text-xs px-2 py-0.5 border border-navy font-black shadow-brutal-sm flex items-center gap-1">
+        <span>⭐</span> <span id="hudScore">0 / 12</span>
+      </div>
+      <button id="soundToggleBtn" onclick="toggleAudio()" class="btn-brutal p-1 bg-white border border-navy text-xs" title="الصوت">
+        <span id="soundIcon">🔊</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="w-full max-w-2xl flex-1 flex flex-col justify-center items-center gap-5 py-4 my-auto">
+
+    <!-- TITLE / HEADER -->
+    <section class="w-full bg-white border-2 sm:border-3 border-navy p-4 sm:p-5 shadow-brutal flex flex-col gap-2 text-center">
+      <div class="inline-flex items-center justify-center gap-1.5 bg-orange text-white border-2 border-navy px-3.5 py-0.5 shadow-brutal-sm font-pixel text-xs font-bold self-center rotate-[-1deg]" dir="ltr">
+        <span>🏆 ASSESSMENT CORNER</span>
+      </div>
+
+      <h1 class="font-arabic font-black text-xl sm:text-2xl text-navy">
+        ركن التقييم والاختبار الشامل 📝
+      </h1>
+      <p class="font-arabic font-bold text-xs sm:text-sm text-gray-700">
+        أجب عن الأجزاء الثلاثة بالترتيب (Reading ➔ Vocabulary ➔ Language)!
+      </p>
+    </section>
+
+    <!-- ASSESSMENT FORM CONTAINER -->
+    <form id="assessmentForm" onsubmit="submitAssessment(event)" class="w-full flex flex-col gap-5">
+
+      <!-- ================= PART 1: READING COMPREHENSION ================= -->
+      <section id="part1Section" class="w-full bg-white border-2 sm:border-3 border-navy p-4 sm:p-5 shadow-brutal flex flex-col gap-4">
+        
+        <div class="flex justify-between items-center border-b-2 border-navy pb-2" dir="ltr">
+          <span class="bg-navy text-cyan font-pixel text-xs px-2.5 py-0.5 border border-navy font-bold">
+            PART 01 / 03 • READING
+          </span>
+          <span class="font-arabic text-xs font-bold text-orange">قطعة القراءة والفهم</span>
+        </div>
+
+        <!-- Passage Box -->
+        <div class="bg-cream border-2 border-navy p-4 space-y-2" dir="ltr">
+          <span class="font-pixel text-[10px] text-gray-500 block font-bold">PASSAGE:</span>
+          <h2 class="font-mono font-black text-sm text-navy">Gen Alpha and Digital Life</h2>
+          <p class="font-mono text-xs sm:text-sm text-navy leading-relaxed">
+            Gen Alpha spends a lot of time online. They like watching videos, creating content, and chatting with friends. They also use emojis and memes to show how they feel. Many parents try to limit screen time but also want kids to learn important digital skills.
+          </p>
+        </div>
+
+        <!-- In-game Feedback Notice for Part 1 -->
+        <div id="noticePart1" class="bg-orange/20 border-2 border-orange p-2.5 text-center font-arabic text-xs font-bold text-orange hidden">
+          ⚠️ يرجى إكمال إجابات الأسئلة قبل الانتقال للقسم التالي!
+        </div>
+
+        <!-- Questions -->
+        <div class="space-y-4 font-mono text-xs sm:text-sm text-navy" dir="ltr">
+          
+          <!-- Q1 -->
+          <div class="bg-white border-2 border-navy p-3.5 space-y-2">
+            <p class="font-bold">1. What things does Gen Alpha like doing online? Name two.</p>
+            <input type="text" id="readQ1" placeholder="Type two activities (e.g., watching videos, chatting...)" class="w-full bg-cream border-2 border-navy p-2.5 text-navy font-bold outline-none text-xs sm:text-sm" />
+          </div>
+
+          <!-- Q2 -->
+          <div class="bg-white border-2 border-navy p-3.5 space-y-2">
+            <p class="font-bold">2. Why do you think parents want to limit screen time?</p>
+            <textarea id="readQ2" placeholder="Type reason (e.g., balance screen time and learn digital skills)..." class="w-full h-20 bg-cream border-2 border-navy p-2.5 text-navy font-bold outline-none text-xs sm:text-sm resize-none"></textarea>
+          </div>
+
+        </div>
+
+        <button type="button" onclick="goToPart2()" class="btn-brutal w-full py-3.5 bg-orange text-white font-arabic text-base font-black border-2 border-navy shadow-brutal hover:bg-yellow hover:text-navy cursor-pointer flex items-center justify-center gap-2 mt-2">
+          <span>التالي: قسم المفردات (Vocabulary) ➔</span>
+        </button>
+
+      </section>
+
+      <!-- ================= PART 2: VOCABULARY (HIDDEN INITIALLY) ================= -->
+      <section id="part2Section" class="w-full bg-white border-2 sm:border-3 border-navy p-4 sm:p-5 shadow-brutal flex flex-col gap-4 hidden">
+        
+        <div class="flex justify-between items-center border-b-2 border-navy pb-2" dir="ltr">
+          <span class="bg-navy text-yellow font-pixel text-xs px-2.5 py-0.5 border border-navy font-bold">
+            PART 02 / 03 • VOCABULARY
+          </span>
+          <span class="font-arabic text-xs font-bold text-orange">توصيل المفردات بمعانيها</span>
+        </div>
+
+        <div class="bg-yellow border-2 border-navy p-3 text-navy font-arabic font-bold text-xs">
+          📌 اقرأ المعاني بالأفل جيداً، ثم اختر الحرف المناسب (A-E) أمام كل كلمة:
+        </div>
+
+        <!-- In-game Feedback Notice for Part 2 -->
+        <div id="noticePart2" class="bg-orange/20 border-2 border-orange p-2.5 text-center font-arabic text-xs font-bold text-orange hidden">
+          ⚠️ يرجى اختيار الحرف المناسب لجميع الكلمات قبل الانتقال للقسم التالي!
+        </div>
+
+        <!-- Reference Box for Meanings -->
+        <div class="bg-cream border-2 border-navy p-3.5 space-y-1.5 font-mono text-xs" dir="ltr">
+          <p class="font-pixel text-[10px] text-navy font-bold mb-1">📖 MEANINGS REFERENCE (قائمة المعاني):</p>
+          <p><strong>A.</strong> A popular new idea or style</p>
+          <p><strong>B.</strong> The amount of time spent using a device</p>
+          <p><strong>C.</strong> Someone who grows up using technology</p>
+          <p><strong>D.</strong> A small icon or image to show feelings online</p>
+          <p><strong>E.</strong> Join or link with someone</p>
+        </div>
+
+        <!-- Vocab Items with Larger Question Box & Smaller Dropdown Selection -->
+        <div class="space-y-3 font-mono text-xs sm:text-sm text-navy" dir="ltr">
+          
+          <div class="bg-white border-2 border-navy p-4 flex justify-between items-center shadow-brutal-sm">
+            <span class="font-black text-sm sm:text-base text-navy">1. digital native</span>
+            <select id="voc1" class="bg-cream border border-navy px-2 py-1 text-xs font-bold outline-none cursor-pointer">
+              <option value="">الحرف</option>
+              <option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option>
+            </select>
+          </div>
+
+          <div class="bg-white border-2 border-navy p-4 flex justify-between items-center shadow-brutal-sm">
+            <span class="font-black text-sm sm:text-base text-navy">2. trend</span>
+            <select id="voc2" class="bg-cream border border-navy px-2 py-1 text-xs font-bold outline-none cursor-pointer">
+              <option value="">الحرف</option>
+              <option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option>
+            </select>
+          </div>
+
+          <div class="bg-white border-2 border-navy p-4 flex justify-between items-center shadow-brutal-sm">
+            <span class="font-black text-sm sm:text-base text-navy">3. emoji</span>
+            <select id="voc3" class="bg-cream border border-navy px-2 py-1 text-xs font-bold outline-none cursor-pointer">
+              <option value="">الحرف</option>
+              <option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option>
+            </select>
+          </div>
+
+          <div class="bg-white border-2 border-navy p-4 flex justify-between items-center shadow-brutal-sm">
+            <span class="font-black text-sm sm:text-base text-navy">4. connect</span>
+            <select id="voc4" class="bg-cream border border-navy px-2 py-1 text-xs font-bold outline-none cursor-pointer">
+              <option value="">الحرف</option>
+              <option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option>
+            </select>
+          </div>
+
+          <div class="bg-white border-2 border-navy p-4 flex justify-between items-center shadow-brutal-sm">
+            <span class="font-black text-sm sm:text-base text-navy">5. screen time</span>
+            <select id="voc5" class="bg-cream border border-navy px-2 py-1 text-xs font-bold outline-none cursor-pointer">
+              <option value="">الحرف</option>
+              <option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option>
+            </select>
+          </div>
+
+        </div>
+
+        <button type="button" onclick="goToPart3()" class="btn-brutal w-full py-3.5 bg-orange text-white font-arabic text-base font-black border-2 border-navy shadow-brutal hover:bg-yellow hover:text-navy cursor-pointer flex items-center justify-center gap-2 mt-2">
+          <span>التالي: قسم القواعد (Language) ➔</span>
+        </button>
+
+      </section>
+
+      <!-- ================= PART 3: LANGUAGE (HIDDEN INITIALLY) ================= -->
+      <section id="part3Section" class="w-full bg-white border-2 sm:border-3 border-navy p-4 sm:p-5 shadow-brutal flex flex-col gap-4 hidden">
+        
+        <div class="flex justify-between items-center border-b-2 border-navy pb-2" dir="ltr">
+          <span class="bg-navy text-lime font-pixel text-xs px-2.5 py-0.5 border border-navy font-bold">
+            PART 03 / 03 • LANGUAGE
+          </span>
+          <span class="font-arabic text-xs font-bold text-orange">اختيار القواعد الصحيحة</span>
+        </div>
+
+        <!-- In-game Feedback Notice for Part 3 -->
+        <div id="noticePart3" class="bg-orange/20 border-2 border-orange p-2.5 text-center font-arabic text-xs font-bold text-orange hidden">
+          ⚠️ يرجى إكمال إجابات جميع الجمل قبل الإرسال النهائي!
+        </div>
+
+        <div class="space-y-4 font-mono text-xs sm:text-sm text-navy" dir="ltr">
+          
+          <div class="bg-cream border-2 border-navy p-3.5 space-y-2">
+            <p class="font-bold">1. Heba 
+              <select id="lang1" class="bg-white border-2 border-navy p-1 font-bold outline-none cursor-pointer">
+                <option value="">-- اختر --</option>
+                <option value="used">used</option>
+                <option value="is using">is using</option>
+              </select> social media now.
+            </p>
+          </div>
+
+          <div class="bg-cream border-2 border-navy p-3.5 space-y-2">
+            <p class="font-bold">2. Right now, Ahmed 
+              <select id="lang2" class="bg-white border-2 border-navy p-1 font-bold outline-none cursor-pointer">
+                <option value="">-- اختر --</option>
+                <option value="watches">watches</option>
+                <option value="is watching">is watching</option>
+              </select> short videos.
+            </p>
+          </div>
+
+          <div class="bg-cream border-2 border-navy p-3.5 space-y-2">
+            <p class="font-bold">3. Look! They 
+              <select id="lang3" class="bg-white border-2 border-navy p-1 font-bold outline-none cursor-pointer">
+                <option value="">-- اختر --</option>
+                <option value="share">share</option>
+                <option value="are sharing">are sharing</option>
+              </select> memes with their friends.
+            </p>
+          </div>
+
+          <div class="bg-cream border-2 border-navy p-3.5 space-y-2">
+            <p class="font-bold">4. I 
+              <select id="lang4" class="bg-white border-2 border-navy p-1 font-bold outline-none cursor-pointer">
+                <option value="">-- اختر --</option>
+                <option value="do">do</option>
+                <option value="am doing">am doing</option>
+              </select> my homework online at the moment.
+            </p>
+          </div>
+
+          <div class="bg-cream border-2 border-navy p-3.5 space-y-2">
+            <p class="font-bold">5. I 
+              <select id="lang5" class="bg-white border-2 border-navy p-1 font-bold outline-none cursor-pointer">
+                <option value="">-- اختر --</option>
+                <option value="visit">visit</option>
+                <option value="am visiting">am visiting</option>
+              </select> my grandma next Monday.
+            </p>
+          </div>
+
+        </div>
+
+        <!-- SUBMIT BUTTON -->
+        <button type="submit" class="btn-brutal w-full py-4 bg-lime text-navy font-arabic text-base sm:text-lg font-black border-2 border-navy shadow-brutal hover:bg-yellow cursor-pointer flex items-center justify-center gap-2 mt-2">
+          <span>إرسال وتصحيح الاختبار النهائي (Submit Answers) 🚀</span>
+        </button>
+
+      </section>
+
+    </form>
+
+  </main>
+
+  <!-- RESULTS MODAL -->
+  <div id="resultsModal" class="fixed inset-0 bg-navy/80 backdrop-blur-none z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-cream border-3 border-navy shadow-brutal-lg w-full max-w-lg p-5 relative flex flex-col items-center text-center gap-4 max-h-[90vh] overflow-y-auto">
+      
+      <div class="w-16 h-16 bg-yellow border-2 border-navy flex items-center justify-center text-3xl shadow-brutal-sm -mt-10 rotate-[-2deg]">
+        📊
+      </div>
+
+      <div class="space-y-1">
+        <h2 class="font-arabic font-black text-2xl sm:text-3xl text-navy">
+          نتيجة الاختبار الشامل
+        </h2>
+        <p class="font-arabic font-bold text-sm text-gray-700" id="resMsg">
+          لقد أنهيت جميع أجزاء الاختبار بنجاح!
+        </p>
+      </div>
+
+      <!-- Score Card -->
+      <div class="bg-white border-2 border-navy p-3 w-full flex justify-around items-center font-mono" dir="ltr">
+        <div>
+          <span class="text-xs text-gray-500 block font-bold">TOTAL SCORE</span>
+          <span class="text-2xl font-black text-yellow" id="finalScoreDisplay">0 / 12</span>
+        </div>
+        <div class="border-r-2 border-navy h-8"></div>
+        <div>
+          <span class="text-xs text-gray-500 block font-bold">CORRECT / WRONG</span>
+          <span class="text-xl font-black text-lime" id="correctWrongDisplay">0 / 0</span>
+        </div>
+      </div>
+
+      <!-- Mistakes / Correct Answers Review Box -->
+      <div id="reviewContainer" class="w-full bg-white border-2 border-navy p-3 text-right font-mono text-xs space-y-2" dir="ltr">
+        <p class="font-pixel text-[11px] text-navy font-bold text-center border-b border-navy pb-1">ANSWER KEY & CORRECTIONS</p>
+      </div>
+
+      <div class="flex gap-2 w-full pt-2">
+        <button onclick="retryAssessment()" class="btn-brutal flex-1 py-3 bg-cream text-navy font-arabic font-black text-sm border-2 border-navy shadow-brutal hover:bg-gray-200">
+          🔄 إعادة المحاولة (Try Again)
+        </button>
+        <button onclick="finishAssessment()" class="btn-brutal flex-1 py-3 bg-cyan text-navy font-arabic font-black text-sm border-2 border-navy shadow-brutal hover:bg-lime">
+          <span>إنهاء الوحدة 🚀</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ===== CELEBRATION / UNIT COMPLETE SCREEN ===== -->
+  <div id="celebration" class="fixed inset-0 z-[60] hidden overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="celTitle">
+    <canvas id="confettiCanvas" class="fixed inset-0 w-full h-full pointer-events-none" style="z-index:2"></canvas>
+    <div id="celFloaters" aria-hidden="true"></div>
+    <div class="relative min-h-full flex items-center justify-center p-4 pt-16" style="z-index:3">
+      <div class="cel-card w-full max-w-md bg-cream border-3 border-navy shadow-brutal-lg px-4 pb-5 pt-16 text-center flex flex-col items-center gap-3 relative">
+        <div class="absolute left-1/2 -translate-x-1/2 -top-14 w-28 h-28 flex items-center justify-center">
+          <div class="cel-rays"></div>
+          <div class="relative w-24 h-24 bg-yellow border-3 border-navy rounded-full flex items-center justify-center shadow-brutal"><span class="cel-trophy text-5xl">🏆</span></div>
+        </div>
+
+        <div class="font-pixel text-[11px] sm:text-xs bg-orange text-white border-2 border-navy px-3 py-0.5 shadow-brutal-sm rotate-[-2deg]" dir="ltr">UNIT 1 • COMPLETE!</div>
+
+        <h2 id="celTitle" class="font-arabic font-black text-3xl sm:text-4xl text-navy leading-tight" dir="rtl"></h2>
+        <p id="celSub" class="font-arabic font-bold text-sm text-gray-700 cel-rise" style="animation-delay:1.1s">أتممت مغامرة جيل ألفا — الوحدة الأولى كاملة! 🚀</p>
+
+        <div id="celStars" class="flex justify-center gap-2 py-1 cel-rise" style="animation-delay:1.3s" dir="ltr"><span class="cel-star">★</span><span class="cel-star">★</span><span class="cel-star">★</span></div>
+
+        <div class="w-full bg-white border-2 border-navy p-3 flex items-center justify-around cel-rise" style="animation-delay:1.5s" dir="ltr">
+          <div><span class="text-[10px] text-gray-500 block font-bold font-mono">FINAL TEST</span><span id="celScore" class="font-pixel text-3xl text-orange">0 / 12</span></div>
+          <div class="border-r-2 border-navy h-10"></div>
+          <div><span class="text-[10px] text-gray-500 block font-bold font-mono">YOUR RANK</span><span id="celRank" class="font-pixel text-sm text-navy leading-tight block max-w-[130px]">—</span></div>
+        </div>
+
+        <div class="w-full grid grid-cols-3 gap-2 cel-rise" style="animation-delay:1.7s">
+          <div class="bg-cyan/30 border-2 border-navy p-2"><div id="celPages" class="font-pixel text-lg text-navy" dir="ltr">0</div><div class="font-arabic text-[11px] font-bold">صفحة أنجزتها</div></div>
+          <div class="bg-yellow/40 border-2 border-navy p-2"><div id="celPoints" class="font-pixel text-lg text-navy" dir="ltr">0</div><div class="font-arabic text-[11px] font-bold">نقطة ⭐</div></div>
+          <div class="bg-lime/25 border-2 border-navy p-2"><div id="celTime" class="font-pixel text-lg text-navy" dir="ltr">0</div><div class="font-arabic text-[11px] font-bold">دقيقة تعلّم</div></div>
+        </div>
+
+        <p id="celMsg" class="font-arabic font-bold text-xs sm:text-sm text-navy leading-relaxed cel-rise" style="animation-delay:1.9s"></p>
+
+        <div class="w-full flex flex-col gap-2 pt-1 cel-rise" style="animation-delay:2.1s">
+          <a href="stats.html" class="btn-brutal w-full py-3 bg-orange text-white font-arabic font-black text-base border-2 border-navy shadow-brutal hover:bg-yellow hover:text-navy no-underline flex items-center justify-center gap-2">📊 شوف إحصائياتي كاملة</a>
+          <div class="flex gap-2">
+            <a href="contents.html" class="btn-brutal flex-1 py-2.5 bg-cyan text-navy font-arabic font-black text-sm border-2 border-navy shadow-brutal-sm hover:bg-lime no-underline text-center">📚 فهرس الدروس</a>
+            <button onclick="closeCelebration()" class="btn-brutal flex-1 py-2.5 bg-white text-navy font-arabic font-black text-sm border-2 border-navy shadow-brutal-sm hover:bg-yellow">↩ مراجعة الإجابات</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="w-full max-w-2xl text-center pt-2 pb-1 text-[11px] font-mono text-gray-600 flex justify-between items-center border-t border-gray-300" dir="ltr">
+    <span>LESSON 06 • ASSESSMENT CORNER</span>
+    <span class="font-bold text-navy">مغامرة جيل ألفا © 2026</span>
+  </footer>
+
+  <!-- JAVASCRIPT GAME ENGINE -->
+  <script>
+    let audioCtx = null;
+    let audioMuted = false;
+
+    // --- AUDIO SYNTHESIZER ---
+    function initAudio() {
+      if (!audioCtx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        audioCtx = new AudioContext();
+      }
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+    }
+
+    function playAudio(type) {
+      if (audioMuted) return;
+      try {
+        initAudio();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        const now = audioCtx.currentTime;
+
+        if (type === 'click') {
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(440, now);
+          osc.frequency.exponentialRampToValueAtTime(880, now + 0.08);
+          gain.gain.setValueAtTime(0.1, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+          osc.start(now);
+          osc.stop(now + 0.08);
+        } else if (type === 'fanfare') {
+          const notes = [261.63, 329.63, 392.00, 523.25, 659.25, 783.99];
+          notes.forEach((freq, idx) => {
+            const noteOsc = audioCtx.createOscillator();
+            const noteGain = audioCtx.createGain();
+            noteOsc.type = 'triangle';
+            noteOsc.frequency.setValueAtTime(freq, now + idx * 0.08);
+            noteGain.gain.setValueAtTime(0.15, now + idx * 0.08);
+            noteGain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.2);
+            noteOsc.connect(noteGain);
+            noteGain.connect(audioCtx.destination);
+            noteOsc.start(now + idx * 0.08);
+            noteOsc.stop(now + idx * 0.08 + 0.2);
+          });
+        }
+      } catch(e) {}
+    }
+
+    function toggleAudio() {
+      audioMuted = !audioMuted;
+      document.getElementById('soundIcon').textContent = audioMuted ? '🔇' : '🔊';
+    }
+
+    // --- STEP-BY-STEP NAVIGATION WITH IN-GAME FEEDBACK ---
+    function goToPart2() {
+      const q1 = document.getElementById('readQ1').value.trim();
+      const q2 = document.getElementById('readQ2').value.trim();
+      const notice = document.getElementById('noticePart1');
+
+      if (!q1 || !q2) {
+        playAudio('click');
+        notice.classList.remove('hidden');
+        notice.textContent = "⚠️ يرجى الإجابة على كلا السؤالين في قطعة القراءة أولاً!";
+        return;
+      }
+      playAudio('click');
+      notice.classList.add('hidden');
+      document.getElementById('part1Section').classList.add('hidden');
+      document.getElementById('part2Section').classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function goToPart3() {
+      const v1 = document.getElementById('voc1').value;
+      const v2 = document.getElementById('voc2').value;
+      const v3 = document.getElementById('voc3').value;
+      const v4 = document.getElementById('voc4').value;
+      const v5 = document.getElementById('voc5').value;
+      const notice = document.getElementById('noticePart2');
+
+      if (!v1 || !v2 || !v3 || !v4 || !v5) {
+        playAudio('click');
+        notice.classList.remove('hidden');
+        notice.textContent = "⚠️ يرجى اختيار الحرف المناسب (A-E) لجميع الكلمات الخمس قبل المتابعة!";
+        return;
+      }
+      playAudio('click');
+      notice.classList.add('hidden');
+      document.getElementById('part2Section').classList.add('hidden');
+      document.getElementById('part3Section').classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // --- SUBMIT ASSESSMENT & GRADE WITH IN-GAME FEEDBACK ---
+    function submitAssessment(event) {
+      event.preventDefault();
+      
+      const l1 = document.getElementById('lang1').value;
+      const l2 = document.getElementById('lang2').value;
+      const l3 = document.getElementById('lang3').value;
+      const l4 = document.getElementById('lang4').value;
+      const l5 = document.getElementById('lang5').value;
+      const notice = document.getElementById('noticePart3');
+
+      if (!l1 || !l2 || !l3 || !l4 || !l5) {
+        playAudio('click');
+        notice.classList.remove('hidden');
+        notice.textContent = "⚠️ يرجى اختيار الإجابة لجميع الجمل الخمس قبل الإرسال النهائي!";
+        return;
+      }
+
+      playAudio('fanfare');
+      notice.classList.add('hidden');
+
+      let score = 0;
+      let correctCount = 0;
+      let wrongCount = 0;
+      let reviewHTML = '';
+
+      // --- PART 1: READING ---
+      const q1Val = document.getElementById('readQ1').value.trim().toLowerCase();
+      const q2Val = document.getElementById('readQ2').value.trim().toLowerCase();
+
+      let q1Words = ['watching', 'videos', 'creating', 'content', 'chatting', 'friends', 'emojis', 'memes'];
+      let q1Matches = q1Words.filter(w => q1Val.includes(w)).length;
+      let isQ1Correct = q1Matches >= 2;
+
+      if (isQ1Correct) {
+        score++; correctCount++;
+      } else {
+        wrongCount++;
+        reviewHTML += `<div class="text-orange">❌ Reading Q1: Correct answer should include two: Watching videos, creating content, or chatting with friends.</div>`;
+      }
+
+      let q2Keywords = ['balance', 'screen', 'digital', 'skills'];
+      let q2Matches = q2Keywords.filter(w => q2Val.includes(w)).length;
+      let isQ2Correct = q2Matches >= 1;
+
+      if (isQ2Correct) {
+        score++; correctCount++;
+      } else {
+        wrongCount++;
+        reviewHTML += `<div class="text-orange">❌ Reading Q2: Correct answer: Because they want kids to have a balance between screen time and other activities while learning digital skills.</div>`;
+      }
+
+      // --- PART 2: VOCABULARY ---
+      const vocabAnswers = { voc1: 'C', voc2: 'A', voc3: 'D', voc4: 'E', voc5: 'B' };
+      for (let key in vocabAnswers) {
+        const val = document.getElementById(key).value;
+        if (val === vocabAnswers[key]) {
+          score++; correctCount++;
+        } else {
+          wrongCount++;
+          reviewHTML += `<div class="text-orange">❌ Vocab (${key.replace('voc','')}) Correct: ${vocabAnswers[key]}</div>`;
+        }
+      }
+
+      // --- PART 3: LANGUAGE ---
+      const langAnswers = { lang1: 'is using', lang2: 'is watching', lang3: 'are sharing', lang4: 'am doing', lang5: 'am visiting' };
+      for (let key in langAnswers) {
+        const val = document.getElementById(key).value;
+        if (val === langAnswers[key]) {
+          score++; correctCount++;
+        } else {
+          wrongCount++;
+          reviewHTML += `<div class="text-orange">❌ Grammar (${key.replace('lang','')}) Correct: ${langAnswers[key]}</div>`;
+        }
+      }
+
+      if (wrongCount === 0) {
+        reviewHTML = `<div class="text-lime text-center font-bold">🎉 ممتاز! جميع إجاباتك صحيحة 100%!</div>`;
+      }
+
+      document.getElementById('hudScore').textContent = `${score} / 12`;
+      document.getElementById('finalScoreDisplay').textContent = `${score} / 12`;
+      document.getElementById('correctWrongDisplay').textContent = `${correctCount} / ${wrongCount}`;
+      document.getElementById('reviewContainer').innerHTML = `<p class="font-pixel text-[11px] text-navy font-bold text-center border-b border-navy pb-1">ANSWER KEY & CORRECTIONS</p>` + reviewHTML;
+
+      document.getElementById('resultsModal').classList.remove('hidden');
+    }
+
+    function retryAssessment() {
+      playAudio('click');
+      document.getElementById('resultsModal').classList.add('hidden');
+      document.getElementById('assessmentForm').reset();
+      document.getElementById('noticePart1').classList.add('hidden');
+      document.getElementById('noticePart2').classList.add('hidden');
+      document.getElementById('noticePart3').classList.add('hidden');
+      document.getElementById('part3Section').classList.add('hidden');
+      document.getElementById('part2Section').classList.add('hidden');
+      document.getElementById('part1Section').classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function finishAssessment() {
+      playAudio('click');
+      showCelebration();
+    }
+
+    // ================= شاشة النهاية الاحتفالية =================
+    const Confetti = (function () {
+      let cv, cx, parts = [], raf = null, rain = null, W = 0, H = 0, dpr = 1;
+      const COLORS = ['#FF5226', '#00E5FF', '#FFE800', '#10B981', '#ffffff', '#FF4D4D'];
+      const calm = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+      function resize() { dpr = Math.min(window.devicePixelRatio || 1, 2); W = innerWidth; H = innerHeight; cv.width = W * dpr; cv.height = H * dpr; cx.setTransform(dpr, 0, 0, dpr, 0, 0); }
+      function burst(x, y, n, spread, power) {
+        for (let i = 0; i < n; i++) {
+          const ang = -Math.PI / 2 + (Math.random() - .5) * spread, sp = (power * .55) + Math.random() * power * .6;
+          parts.push({ x, y, vx: Math.cos(ang) * sp, vy: Math.sin(ang) * sp, g: .2 + Math.random() * .08, w: 6 + Math.random() * 7, h: 4 + Math.random() * 6, r: Math.random() * 6.28, vr: (Math.random() - .5) * .35, c: COLORS[(Math.random() * COLORS.length) | 0], t: 0, max: 150 + Math.random() * 90, round: Math.random() < .25 });
+        }
+        if (!raf) raf = requestAnimationFrame(tick);
+      }
+      function tick() {
+        cx.clearRect(0, 0, W, H);
+        parts = parts.filter(p => p.t < p.max && p.y < H + 40);
+        for (const p of parts) {
+          p.t++; p.vy += p.g; p.vx *= .992; p.x += p.vx; p.y += p.vy; p.r += p.vr;
+          cx.save(); cx.translate(p.x, p.y); cx.rotate(p.r); cx.globalAlpha = Math.min(1, (p.max - p.t) / 40);
+          cx.fillStyle = p.c; cx.strokeStyle = '#0E1726'; cx.lineWidth = 1;
+          if (p.round) { cx.beginPath(); cx.arc(0, 0, p.w / 2, 0, 6.28); cx.fill(); cx.stroke(); }
+          else { cx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h); cx.strokeRect(-p.w / 2, -p.h / 2, p.w, p.h); }
+          cx.restore();
+        }
+        raf = (parts.length || rain) ? requestAnimationFrame(tick) : null;
+        if (!raf) cx.clearRect(0, 0, W, H);
+      }
+      return {
+        start() {
+          cv = document.getElementById('confettiCanvas'); cx = cv.getContext('2d'); resize(); window.addEventListener('resize', resize);
+          const k = calm ? .3 : 1;
+          burst(W * .12, H * .95, 70 * k, 1.1, 17); burst(W * .88, H * .95, 70 * k, 1.1, 17); burst(W * .5, H * .55, 60 * k, 6.28, 12);
+          if (!calm) {
+            let n = 0;
+            rain = setInterval(() => {
+              if (document.hidden) return;
+              burst(Math.random() * W, -10, 14, 0.6, 2); burst(Math.random() < .5 ? W * .1 : W * .9, H * .98, 26, 1, 15);
+              if (++n > 9) { clearInterval(rain); rain = null; }
+            }, 900);
+          }
+        },
+        stop() { clearInterval(rain); rain = null; parts = []; window.removeEventListener('resize', resize); if (raf) cancelAnimationFrame(raf); raf = null; if (cx) cx.clearRect(0, 0, W, H); }
+      };
+    })();
+
+    function countUp(el, to, suffix, ms) {
+      const t0 = performance.now();
+      (function step(t) { const k = Math.min(1, (t - t0) / ms); el.textContent = Math.round(to * k) + suffix; if (k < 1) requestAnimationFrame(step); })(t0);
+    }
+
+    function showCelebration() {
+      const box = document.getElementById('celebration');
+      if (!box.classList.contains('hidden')) return;
+      const sess = (window.GA && GA.session()) || { name: 'بطل جيل ألفا' };
+      const rec = (window.GA && GA.me()) || { pages: {} };
+      const m = (document.getElementById('finalScoreDisplay').textContent.match(/(\d+)\s*\/\s*(\d+)/)) || [0, 0, 12];
+      const sc = +m[1], mx = +m[2] || 12;
+      const stars = sc >= 10 ? 3 : sc >= 7 ? 2 : 1;
+      const rank = sc >= 10 ? '🦸 DIGITAL HERO' : sc >= 7 ? '🧭 DIGITAL EXPLORER' : '🌱 DIGITAL LEARNER';
+      const msgs = {
+        3: 'أداء رائع! أنت فعلاً من أبطال جيل ألفا الرقمي — واصل التميز! 🌟',
+        2: 'شغل جميل! لو راجعت الإجابات الخاطئة هتوصل للنجمة الثالثة بسهولة 💪',
+        1: 'بداية كويسة! راجع مفتاح الإجابات وجرّب الاختبار تاني لتحسّن درجتك 🌱'
+      };
+
+      // إحصائيات
+      let pages = 0, pts = 0, secs = 0;
+      if (window.GA) { pages = GA.progress(rec).done; pts = GA.stars(rec).got; GA.PAGES.forEach(p => { secs += (rec.pages[p.id] && rec.pages[p.id].time) || 0; }); }
+
+      // العنوان حرف حرف
+      const title = document.getElementById('celTitle'); title.innerHTML = '';
+      // الأنيميشن بالكلمة (مش بالحرف) عشان حروف العربي تفضل متصلة
+      ('مبروك يا ' + sess.name + '! 🎉').split(' ').forEach((w, i) => {
+        const s = document.createElement('span'); s.className = 'cel-letter'; s.textContent = w; s.style.animationDelay = (0.35 + i * 0.18) + 's';
+        title.appendChild(s); title.appendChild(document.createTextNode(' '));
+      });
+      document.getElementById('celScore').textContent = '0 / ' + mx;
+      document.getElementById('celRank').textContent = rank;
+      document.getElementById('celMsg').textContent = msgs[stars];
+      document.querySelectorAll('.cel-star').forEach(s => s.classList.remove('on'));
+      document.getElementById('celPages').textContent = '0'; document.getElementById('celPoints').textContent = '0'; document.getElementById('celTime').textContent = '0';
+
+      // أرقام عائمة (إيموجي)
+      const fl = document.getElementById('celFloaters'); fl.innerHTML = '';
+      ['📱', '🎮', '🌟', '💬', '😎', '🧠', '📚', '🎧', '✨', '🚀'].forEach((e, i) => {
+        const d = document.createElement('div'); d.className = 'cel-float'; d.textContent = e;
+        d.style.left = (6 + i * 9.5) + '%'; d.style.animationDuration = (7 + (i % 4) * 1.8) + 's'; d.style.animationDelay = (i * 0.6) + 's'; fl.appendChild(d);
+      });
+
+      box.classList.remove('hidden'); document.getElementById('resultsModal').classList.add('hidden'); box.scrollTop = 0;
+      document.body.style.overflow = 'hidden';
+      Confetti.start();
+
+      // أصوات + نجوم تتفتح واحدة واحدة + عدّاد
+      playAudio('fanfare'); setTimeout(() => playAudio('fanfare'), 900); setTimeout(() => playAudio('fanfare'), 1900);
+      document.querySelectorAll('.cel-star').forEach((s, i) => { if (i < stars) setTimeout(() => { s.classList.add('on'); playAudio('correct'); }, 1500 + i * 450); });
+      setTimeout(() => {
+        const el = document.getElementById('celScore'); const t0 = performance.now();
+        (function step(t) { const k = Math.min(1, (t - t0) / 1100); el.textContent = Math.round(sc * k) + ' / ' + mx; if (k < 1) requestAnimationFrame(step); })(t0);
+        countUp(document.getElementById('celPages'), pages, '', 1100); countUp(document.getElementById('celPoints'), pts, '', 1100); countUp(document.getElementById('celTime'), Math.max(1, Math.round(secs / 60)), '', 1100);
+      }, 1500);
+    }
+
+    function closeCelebration() {
+      playAudio('click'); Confetti.stop();
+      document.getElementById('celebration').classList.add('hidden');
+      document.getElementById('resultsModal').classList.remove('hidden');
+      document.body.style.overflow = '';
+    }
+  </script>
+</body>
+</html>

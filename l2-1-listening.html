@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="h-full">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Listening | Gen Alpha</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts: Cairo, Kufam, Silkscreen, Space Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800;900&family=Kufam:wght@700;800;900&family=Silkscreen:wght@400;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cream: '#FAF7F2',
+            navy: '#0E1726',
+            orange: '#FF5226',
+            cyan: '#00E5FF',
+            yellow: '#FFE800',
+            lime: '#10B981',
+            softRed: '#FF4D4D',
+          },
+          fontFamily: {
+            arabic: ['Kufam', 'Cairo', 'sans-serif'],
+            cairo: ['Cairo', 'sans-serif'],
+            pixel: ['Silkscreen', 'monospace'],
+            mono: ['Space Mono', 'monospace'],
+          },
+          boxShadow: {
+            'brutal-sm': '2px 2px 0px #0E1726',
+            'brutal': '4px 4px 0px #0E1726',
+            'brutal-lg': '5px 5px 0px #0E1726',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #FAF7F2;
+      color: #0E1726;
+      font-family: 'Cairo', sans-serif;
+      overflow-x: hidden;
+      background-image: radial-gradient(#0E1726 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+
+    .btn-brutal {
+      transition: all 0.1s ease-in-out;
+    }
+    .btn-brutal:active {
+      transform: translate(3px, 3px);
+      box-shadow: 1px 1px 0px #0E1726 !important;
+    }
+
+    .option-card {
+      transition: all 0.15s ease;
+    }
+    .option-card:hover {
+      transform: translateY(-2px);
+    }
+
+    /* Star Pop Animation */
+    @keyframes starPop {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.4) rotate(12deg); }
+      100% { transform: scale(1); }
+    }
+    .star-earned {
+      animation: starPop 0.4s ease-in-out forwards;
+      color: #FFE800 !important;
+      text-shadow: 2px 2px 0px #0E1726;
+    }
+  </style>
+  <script src="app.js"></script>
+
+  <style>
+    .stage { animation: stageIn .35s ease-out both; }
+    @keyframes stageIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+    .gstar { font-size: 26px; line-height: 1; color: #CBD5E1; text-shadow: 1px 1px 0 #0E1726; display: inline-block; }
+    .gstar.on { color: #FFE800; }
+    .gstar.pop { animation: starPop .6s cubic-bezier(.2,1.8,.4,1); }
+    @keyframes starPop { 0% { transform: scale(0) rotate(-90deg); } 70% { transform: scale(1.6) rotate(15deg); } 100% { transform: scale(1) rotate(0); } }
+    .sent { transition: background .2s; padding: 1px 3px; border-radius: 3px; }
+    .sent.on { background: #FFE800; box-shadow: 0 0 0 2px #0E1726; }
+    :where(.wchip) { background: #fff; }
+    .wchip { border: 2px solid #0E1726; padding: 6px 12px; font-family: 'Space Mono', monospace; font-weight: 700; font-size: 15px; box-shadow: 2px 2px 0 #0E1726; cursor: pointer; }
+    .wchip:active { transform: translate(2px,2px); box-shadow: none; }
+    .wchip.used { opacity: .25; pointer-events: none; }
+    .pill { display: inline-block; border: 2px solid #0E1726; padding: 4px 10px; font-family: 'Space Mono', monospace; font-weight: 700; font-size: 14px; }
+    .part-S { background: #BDF4FF; } .part-H { background: #FF5226; color: #fff; } .part-V { background: #10B981; color: #fff; } .part-N { background: #FFB3B3; } .part-X { background: #F1F5F9; }
+    .opt:hover:not(:disabled) { background: #FFE800; }
+    .opt:disabled { cursor: default; }
+    .pulse-btn { animation: pulseBtn 1.4s ease-in-out infinite; }
+    @keyframes pulseBtn { 0%,100% { transform: scale(1); } 50% { transform: scale(1.04); } }
+    @media (prefers-reduced-motion: reduce) { .stage, .pulse-btn, .gstar.pop { animation: none; } }
+  </style>
+</head>
+<body data-ga-page="l2-1" class="min-h-screen flex flex-col justify-between items-center p-3 sm:p-5 selection:bg-orange selection:text-cream">
+
+  <header class="w-full max-w-xl flex justify-between items-center bg-white border-2 border-navy p-2.5 sm:p-3 shadow-brutal z-20">
+    <div class="flex items-center gap-2" dir="ltr">
+      <span class="bg-cyan text-navy font-pixel text-[10px] sm:text-xs px-2 py-0.5 border border-navy font-bold">UNIT 01 / LESSON 02</span>
+    </div>
+    <div class="flex items-center gap-2">
+      <div class="bg-yellow text-navy font-pixel text-[11px] sm:text-xs px-2.5 py-0.5 border border-navy font-black shadow-brutal-sm" dir="ltr">01 / 03</div>
+      <button id="soundToggleBtn" onclick="toggleAudio()" class="btn-brutal p-1 bg-white border border-navy text-xs" title="الصوت"><span id="soundIcon">🔊</span></button>
+    </div>
+  </header>
+
+  <main class="w-full max-w-xl flex-1 flex flex-col items-center gap-4 py-3 my-auto">
+    <section class="w-full flex flex-col items-center text-center gap-1.5">
+      <div class="inline-flex items-center gap-1.5 bg-orange text-white border-2 border-navy px-3 py-0.5 shadow-brutal-sm font-pixel text-xs sm:text-sm font-bold rotate-[-1deg]" dir="ltr"><span>🎧 LISTENING</span></div>
+      <h1 class="font-arabic font-black text-2xl sm:text-3xl text-navy flex items-center justify-center gap-2"><span>الاستماع</span><span class="text-orange text-xl sm:text-2xl">🎧</span></h1>
+      <p class="font-arabic font-bold text-xs sm:text-sm text-gray-700">نافذة واحدة في كل مرة — ركّز وخطوة بخطوة</p>
+      <div id="pips" class="flex items-center justify-center gap-1.5 pt-1" dir="ltr"></div>
+    </section>
+
+    <section id="starPanel" class="hidden w-full bg-white border-2 border-navy p-3 shadow-brutal">
+      <div class="flex justify-between items-center mb-2"><span class="font-arabic font-bold text-sm text-navy">معدل الإنجاز:</span><span class="font-pixel text-xs text-orange" dir="ltr">STARS <span id="sGot">0</span> / <span id="sMax">0</span></span></div>
+      <div id="starRow" class="flex flex-wrap gap-1 justify-center bg-cream border-2 border-navy p-2" dir="ltr"></div>
+    </section>
+
+    <!-- STAGE 1: Before you start -->
+    <section class="stage w-full bg-white border-2 sm:border-3 border-navy p-4 sm:p-5 shadow-brutal flex flex-col gap-3">
+      <div class="flex justify-between items-center border-b-2 border-navy pb-2" dir="ltr"><span class="bg-navy text-cyan font-pixel text-[10px] sm:text-xs px-2 py-0.5 border border-navy font-bold">A • BEFORE YOU START</span></div>
+      <div class="bg-yellow border-2 border-navy p-2.5 text-navy font-black text-sm leading-snug" dir="ltr">Think and discuss in pairs. Answer the following questions.</div>
+      <label class="font-bold text-sm text-navy" dir="ltr">1. How much screen time do you usually have each day?</label>
+      <input id="d1" type="text" dir="ltr" placeholder="Type your answer…" class="w-full bg-cream border-2 border-navy p-3 font-mono text-sm focus:outline-none focus:border-orange" />
+      <label class="font-bold text-sm text-navy" dir="ltr">2. What kind of content do you watch or listen to?</label>
+      <input id="d2" type="text" dir="ltr" placeholder="Type your answer…" class="w-full bg-cream border-2 border-navy p-3 font-mono text-sm focus:outline-none focus:border-orange" />
+      <p id="warn1" class="hidden text-center text-orange font-arabic font-bold text-xs">⚠️ اكتب إجابة لكل سؤال الأول (ولو كلمتين).</p>
+      <button id="to2" onclick="goListening()"  class="btn-brutal w-full py-3.5 font-arabic text-base sm:text-lg font-black border-2 border-navy shadow-brutal flex items-center justify-center gap-2 bg-orange text-white hover:bg-yellow hover:text-navy cursor-pointer"><span>انتقل للاستماع 🎧</span><span class="font-mono text-xl">←</span></button>
+    </section>
+
+    <!-- STAGE 2: Listening (القطعة فقط) -->
+    <section class="stage hidden w-full bg-white border-2 sm:border-3 border-navy p-4 sm:p-5 shadow-brutal flex flex-col gap-3">
+      <div class="flex justify-between items-center border-b-2 border-navy pb-2" dir="ltr"><span class="bg-navy text-cyan font-pixel text-[10px] sm:text-xs px-2 py-0.5 border border-navy font-bold">B • LISTENING</span></div>
+      <p class="font-arabic font-bold text-sm text-navy text-center">🎧 اضغط على زر التشغيل واسمع القطعة <span class="text-orange">كاملة</span> — بعدها هتظهر الأسئلة.</p>
+      <div class="w-full h-3 bg-cream border-2 border-navy"><div id="lisBar" class="h-full bg-lime" style="width:0%"></div></div>
+      <button id="playBtn" onclick="togglePlay()" class="btn-brutal pulse-btn w-full py-4 bg-yellow text-navy font-black text-lg border-2 border-navy shadow-brutal flex items-center justify-center gap-3 hover:bg-cyan" dir="ltr"><span id="playIcon" class="text-2xl">▶</span><span id="playTxt">Play the audio</span></button>
+      <p id="lisStatus" class="text-center font-arabic text-xs font-bold text-gray-600 min-h-[18px]"></p>
+      <div id="passage" class="bg-cream border-3 border-navy p-4 shadow-brutal-sm font-mono font-bold text-[19px] sm:text-[22px] leading-[2.15] text-navy" dir="ltr"></div>
+      <button id="manualBtn" onclick="finishListening(true)" class="hidden btn-brutal w-full py-3 bg-white text-navy font-arabic font-black text-sm border-2 border-navy shadow-brutal-sm hover:bg-lime">✅ قرأت القطعة كاملة — ابدأ الأسئلة</button>
+    </section>
+
+    <!-- STAGE 3: Questions -->
+    <section class="stage hidden w-full bg-white border-2 sm:border-3 border-navy p-4 sm:p-5 shadow-brutal flex flex-col gap-3">
+      <div id="qRun" class="flex flex-col gap-3"></div>
+      <div class="flex gap-2 pt-1">
+        <button onclick="listenAgain()" id="againBtn" class="btn-brutal flex-1 py-2.5 bg-white text-navy font-arabic font-black text-xs sm:text-sm border-2 border-navy shadow-brutal-sm hover:bg-yellow">🎧 اسمع القطعة تاني</button>
+      </div>
+      <details class="border-2 border-navy bg-cream"><summary class="cursor-pointer p-2 font-arabic font-bold text-xs text-navy select-none">📄 اعرض نص القطعة</summary><p id="scriptTxt" class="p-3 text-sm font-mono font-bold leading-relaxed" dir="ltr"></p></details>
+    </section>
+
+  </main>
+
+  <footer class="w-full max-w-xl text-center pt-2 pb-1 text-[11px] font-mono text-gray-600 flex justify-between items-center border-t border-gray-300" dir="ltr">
+    <span>LESSON 02 • LISTENING</span>
+    <span class="font-bold text-navy">مغامرة جيل ألفا © 2026</span>
+  </footer>
+
+  <div id="doneL1" class="fixed inset-0 bg-navy/80 z-50 hidden items-center justify-center p-4">
+    <div class="bg-cream border-3 border-navy shadow-brutal-lg w-full max-w-md p-5 relative flex flex-col items-center text-center gap-4">
+      <div class="w-16 h-16 bg-yellow border-2 border-navy flex items-center justify-center text-3xl shadow-brutal-sm -mt-10 rotate-[-2deg]">🎧</div>
+      <div class="space-y-1"><h2 class="font-arabic font-black text-2xl sm:text-3xl text-navy">Great Listening! 🎉</h2><p class="font-arabic font-bold text-sm text-gray-700">سمعت القطعة وحلّيت كل الأسئلة — جاهز لمهمة القواعد؟</p></div>
+      <div class="bg-white border-2 border-navy p-3 w-full flex justify-around items-center font-mono" dir="ltr">
+        <div><span class="text-xs text-gray-500 block font-bold">STARS EARNED</span><span class="text-2xl font-black text-yellow" id="doneL1_stars">0 / 0 ⭐</span></div>
+        <div class="border-r-2 border-navy h-8"></div>
+        <div><span class="text-xs text-gray-500 block font-bold">STATUS</span><span class="text-2xl font-black text-lime">COMPLETED</span></div>
+      </div>
+      <button onclick="playAudio('click'); location.href='l2-2-language-in-use.html'" class="btn-brutal w-full py-3.5 bg-orange text-white font-arabic font-black text-base border-2 border-navy shadow-brutal hover:bg-yellow hover:text-navy flex items-center justify-center gap-2"><span>Grammar Mission</span><span class="font-mono text-xl">←</span></button>
+    </div>
+  </div>
+  <script>
+    let audioCtx = null;
+    let audioMuted = false;
+
+    function initAudio() {
+      if (!audioCtx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        audioCtx = new AudioContext();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    function playAudio(type) {
+      if (audioMuted) return;
+      try {
+        initAudio();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        const now = audioCtx.currentTime;
+
+        if (type === 'correct') {
+          const notes = [523.25, 659.25, 783.99, 1046.50];
+          notes.forEach((freq, idx) => {
+            const noteOsc = audioCtx.createOscillator();
+            const noteGain = audioCtx.createGain();
+            noteOsc.type = 'square';
+            noteOsc.frequency.setValueAtTime(freq, now + idx * 0.06);
+            noteGain.gain.setValueAtTime(0.1, now + idx * 0.06);
+            noteGain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.06 + 0.12);
+            noteOsc.connect(noteGain);
+            noteGain.connect(audioCtx.destination);
+            noteOsc.start(now + idx * 0.06);
+            noteOsc.stop(now + idx * 0.06 + 0.12);
+          });
+        } else if (type === 'wrong') {
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(200, now);
+          osc.frequency.exponentialRampToValueAtTime(140, now + 0.15);
+          gain.gain.setValueAtTime(0.12, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+          osc.start(now);
+          osc.stop(now + 0.15);
+        } else if (type === 'fanfare') {
+          const notes = [261.63, 329.63, 392.00, 523.25, 659.25, 783.99];
+          notes.forEach((freq, idx) => {
+            const noteOsc = audioCtx.createOscillator();
+            const noteGain = audioCtx.createGain();
+            noteOsc.type = 'triangle';
+            noteOsc.frequency.setValueAtTime(freq, now + idx * 0.08);
+            noteGain.gain.setValueAtTime(0.15, now + idx * 0.08);
+            noteGain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.2);
+            noteOsc.connect(noteGain);
+            noteGain.connect(audioCtx.destination);
+            noteOsc.start(now + idx * 0.08);
+            noteOsc.stop(now + idx * 0.08 + 0.2);
+          });
+        }
+      } catch(e) {}
+    }
+
+    function toggleAudio() {
+      audioMuted = !audioMuted;
+      document.getElementById('soundIcon').textContent = audioMuted ? '🔇' : '🔊';
+    }
+
+    const $ = (id) => document.getElementById(id);
+    function esc(s) { return String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
+    function shuffle(a) { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+    function showModal(id) { const m = $(id); m.classList.remove('hidden'); m.classList.add('flex'); }
+    function enable(id) { const b = $(id); b.disabled = false; b.className = b.className.replace('bg-gray-300 text-gray-500', 'bg-orange text-white hover:bg-yellow hover:text-navy cursor-pointer'); }
+
+    // ---------- نظام النوافذ: نافذة واحدة في كل مرة ----------
+    const Stage = {
+      n: 0, cur: 0, onChange: null,
+      init(n) { this.n = n; this.go(0, true); },
+      go(i, first) {
+        this.cur = i;
+        document.querySelectorAll('.stage').forEach((s, k) => s.classList.toggle('hidden', k !== i));
+        $('pips').innerHTML = Array.from({ length: this.n }, (_, k) => '<span style="width:' + (k === i ? 26 : 10) + 'px;height:10px;border:2px solid #0E1726;background:' + (k < i ? '#10B981' : k === i ? '#FF5226' : '#fff') + ';transition:all .3s"></span>').join('');
+        if (this.onChange) this.onChange(i);
+        if (!first) window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    };
+
+    // ---------- لوحة النجوم ----------
+    const StarPanel = {
+      got: 0, max: 0,
+      init(max) { this.max = max; this.got = 0; this.render(); },
+      render() { $('sGot').textContent = this.got; $('sMax').textContent = this.max; $('starRow').innerHTML = Array.from({ length: this.max }, (_, i) => '<span class="gstar' + (i < this.got ? ' on' : '') + '" id="gs' + i + '">★</span>').join(''); },
+      add() { const i = this.got; this.got++; this.render(); const el = $('gs' + i); if (el) el.classList.add('pop'); }
+    };
+
+    // ---------- مشغّل الأسئلة: سؤال واحد، تغذية راجعة فورية، إعادة المحاولة لحد الصح ----------
+    function Runner(cfg) {
+      const root = $(cfg.el), qs = cfg.qs; let qi = 0, solved = false;
+      root.innerHTML = '<div class="flex items-center justify-between gap-2 border-b-2 border-navy pb-2" dir="ltr"><span class="r-lab bg-navy text-cyan font-pixel text-[10px] sm:text-xs px-2 py-0.5 border border-navy font-bold"></span><span class="r-cnt font-pixel text-[11px] text-orange"></span></div>' +
+        '<div class="r-prompt bg-yellow border-2 border-navy p-3 text-navy font-black text-base leading-relaxed" dir="ltr"></div>' +
+        '<div class="r-ans flex flex-col gap-2" dir="ltr"></div>' +
+        '<div class="r-fb hidden border-2 p-2.5 font-arabic font-black text-sm text-center"></div>' +
+        '<button class="r-next hidden btn-brutal w-full py-3 bg-cyan text-navy font-arabic font-black text-base border-2 border-navy shadow-brutal-sm hover:bg-lime items-center justify-center gap-2"></button>';
+      const $q = (s) => root.querySelector(s);
+      const prompt = $q('.r-prompt'), ans = $q('.r-ans'), fbEl = $q('.r-fb'), nextEl = $q('.r-next');
+      function fb(ok, msg) {
+        fbEl.classList.remove('hidden', 'border-lime', 'bg-lime/20', 'text-lime', 'border-softRed', 'bg-softRed/10', 'text-softRed');
+        fbEl.classList.add(...(ok ? ['border-lime', 'bg-lime/20', 'text-navy'] : ['border-softRed', 'bg-softRed/10', 'text-softRed']));
+        fbEl.textContent = msg;
+      }
+      function rec(q, a, ok) { GA.answer(cfg.pid, q.id, q.rec || q.prompt, a, ok, q.key); }
+      function win(q) {
+        solved = true; fb(true, '✔ صح! أحسنت 🌟 +1 نجمة'); playAudio('correct'); cfg.onStar();
+        const last = qi === qs.length - 1;
+        nextEl.classList.remove('hidden'); nextEl.classList.add('flex');
+        nextEl.innerHTML = '<span>' + (last ? cfg.finishLabel : 'السؤال التالي') + '</span><span class="font-mono text-xl">←</span>';
+        nextEl.onclick = () => { playAudio('click'); if (last) cfg.onDone(); else { qi++; render(); } };
+        nextEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+      function wrong(msg) { fb(false, msg || '❌ مش صح — جرّب تاني!'); playAudio('wrong'); }
+      function choices(q, host, onPick) {
+        let opts = q.shuffle ? shuffle(q.options) : q.options;
+        host.innerHTML = '';
+        opts.forEach((o) => {
+          const b = document.createElement('button');
+          b.className = 'opt btn-brutal text-left p-3 border-2 border-navy bg-white font-bold text-sm sm:text-base shadow-brutal-sm';
+          b.innerHTML = esc(o.t); b.onclick = () => onPick(o, b, host); host.appendChild(b);
+        });
+      }
+      function renderChoice(q) {
+        choices(q, ans, (o, b, host) => {
+          if (solved) return; const ok = o.v === q.answer; rec(q, o.t, ok);
+          if (ok) { b.classList.remove('bg-white'); b.classList.add('bg-lime', 'text-white'); host.querySelectorAll('button').forEach(x => x.disabled = true); if (q.winHtml) prompt.innerHTML = q.winHtml; win(q); }
+          else { b.classList.remove('bg-white'); b.classList.add('bg-softRed', 'text-white'); b.disabled = true; wrong(); }
+        });
+      }
+      function renderBuild(q) {
+        let tray = []; const pool = shuffle(q.pool.map((w, i) => ({ w, i })));
+        ans.innerHTML = '<div class="b-tray min-h-[58px] border-2 border-dashed border-navy bg-cream p-2 flex flex-wrap gap-1.5 items-center"></div><div class="b-pool flex flex-wrap gap-1.5 justify-center py-1"></div>' +
+          '<div class="flex gap-2"><button class="b-clear btn-brutal px-3 py-2.5 bg-white border-2 border-navy font-arabic font-black text-sm shadow-brutal-sm">↺ مسح</button><button class="b-check btn-brutal flex-1 py-2.5 bg-orange text-white border-2 border-navy font-arabic font-black text-sm shadow-brutal-sm hover:bg-yellow hover:text-navy">✔ تحقق من الجملة</button></div>';
+        const trayEl = ans.querySelector('.b-tray'), poolEl = ans.querySelector('.b-pool');
+        function paint() {
+          trayEl.innerHTML = tray.length ? '' : '<span class="text-xs text-gray-500 font-arabic font-bold">اضغط على الكلمات بالترتيب لتكوين الجملة…</span>';
+          tray.forEach((p, k) => { const c = document.createElement('button'); c.className = 'wchip bg-cyan'; c.textContent = p.w; c.onclick = () => { if (solved) return; tray.splice(k, 1); paint(); }; trayEl.appendChild(c); });
+          poolEl.innerHTML = '';
+          pool.forEach((p) => { const c = document.createElement('button'); c.className = 'wchip' + (tray.includes(p) ? ' used' : ''); c.textContent = p.w; c.onclick = () => { if (solved) return; tray.push(p); paint(); playAudio('click'); }; poolEl.appendChild(c); });
+        }
+        paint();
+        ans.querySelector('.b-clear').onclick = () => { if (!solved) { tray = []; paint(); } };
+        ans.querySelector('.b-check').onclick = () => {
+          if (solved) return; if (!tray.length) { wrong('⚠️ ركّب الجملة الأول!'); return; }
+          const s = tray.map(p => p.w.toLowerCase()).join(' '), ok = q.answers.includes(s); rec(q, tray.map(p => p.w).join(' '), ok);
+          if (ok) { trayEl.classList.add('border-lime'); ans.querySelectorAll('button').forEach(x => x.disabled = true); win(q); }
+          else { trayEl.classList.add('border-softRed'); setTimeout(() => trayEl.classList.remove('border-softRed'), 700); wrong('❌ الجملة مش مظبوطة — راجع ترتيب الكلمات وشكل الفعل وجرّب تاني!'); }
+        };
+      }
+      function renderDetect(q) {
+        ans.innerHTML = '<div class="d-chunks flex flex-wrap gap-2 justify-center py-1"></div><div class="d-fix hidden flex-col gap-2"></div>';
+        const ch = ans.querySelector('.d-chunks'), fix = ans.querySelector('.d-fix'); let found = false;
+        q.chunks.forEach((c) => {
+          const b = document.createElement('button'); b.className = 'wchip text-base'; b.textContent = c.t;
+          b.onclick = () => {
+            if (solved || found) return;
+            if (c.bad) { found = true; b.classList.add('bg-softRed', 'text-white'); playAudio('correct'); fb(true, '🔍 لقيت الغلطة! دلوقتي اختار التصحيح الصح 👇'); fix.classList.remove('hidden'); fix.classList.add('flex');
+              choices({ options: q.options, shuffle: q.shuffle }, fix, (o, ob, host) => {
+                if (solved) return; const ok = o.v === q.answer; rec(q, '[' + c.t + '] → ' + o.t, ok);
+                if (ok) { ob.classList.remove('bg-white'); ob.classList.add('bg-lime', 'text-white'); host.querySelectorAll('button').forEach(x => x.disabled = true); prompt.textContent = q.fixed; win(q); }
+                else { ob.classList.remove('bg-white'); ob.classList.add('bg-softRed', 'text-white'); ob.disabled = true; wrong('❌ مش صح — جرّب تصحيح تاني!'); }
+              });
+            } else { b.classList.add('opacity-40'); b.disabled = true; rec(q, 'Tapped: ' + c.t, false); wrong('❌ الجزء ده سليم — دوّر على الغلطة تاني!'); }
+          };
+          ch.appendChild(b);
+        });
+      }
+      function render() {
+        const q = qs[qi]; solved = false;
+        $q('.r-lab').textContent = q.label; $q('.r-cnt').textContent = (qi + 1) + ' / ' + qs.length;
+        prompt.innerHTML = q.prompt; fbEl.classList.add('hidden'); nextEl.classList.add('hidden'); nextEl.classList.remove('flex'); ans.innerHTML = '';
+        if (q.type === 'build') renderBuild(q); else if (q.type === 'detect') renderDetect(q); else renderChoice(q);
+        if (q.type === 'detect') { fb(true, '👆 اضغط على الجزء اللي فيه الغلطة'); fbEl.classList.remove('border-lime', 'bg-lime/20'); fbEl.classList.add('border-navy', 'bg-white'); }
+      }
+      render();
+    }
+
+
+    const SCRIPT = "Hello, everyone! Today I am talking about Gen Alpha. Gen Alpha are children born from around the year 2010. They are digital natives, because they learn to use technology before they can read. They use tablets, smartphones and computers every day to watch videos, play games and chat with friends. Parents are trying to limit screen time, but they also want their kids to learn useful digital skills. Gen Alpha are fast learners and they adapt quickly. They are also learning to balance online activities with real-life connections, like playing sports and meeting friends. Technology is not bad. We just need to use it wisely!";
+    const SENTS = SCRIPT.split(/(?<=[.!?])\s+/);
+    $('passage').innerHTML = SENTS.map((s, i) => '<span class="sent" id="sent' + i + '">' + esc(s) + '</span>').join(' ');
+    $('scriptTxt').textContent = SCRIPT;
+
+    // ---- أسئلة (9 نقاط)
+    const TF = (n, s, a) => ({ id: 'q3_' + n, label: 'Question 3 • True or False', type: 'choice', prompt: '3-' + n + '. ' + esc(s), rec: 'Listening Q3-' + n + '. ' + s, options: [{ t: 'True (T) ✔', v: 'T' }, { t: 'False (F) ✘', v: 'F' }], answer: a, key: a === 'T' ? 'True (T)' : 'False (F)' });
+    const WORDS = [{ t: 'balance', v: 'balance' }, { t: 'limit', v: 'limit' }, { t: 'emojis', v: 'emojis' }];
+    const FILL = (n, pre, post, a) => ({ id: 'q4_' + n, label: 'Question 4 • Complete the sentence', type: 'choice', prompt: '4-' + n + '. ' + esc(pre) + ' <span style="border-bottom:3px solid #0E1726;padding:0 18px">&nbsp;&nbsp;&nbsp;</span> ' + esc(post), winHtml: '4-' + n + '. ' + esc(pre) + ' <span style="background:#10B981;color:#fff;padding:0 8px;border:2px solid #0E1726">' + a + '</span> ' + esc(post), rec: 'Listening Q4-' + n + '. ' + pre + ' ___ ' + post, options: WORDS, answer: a, key: a });
+    const QS = [
+      { id: 'q2', label: 'Question 2 • Listening', type: 'choice', shuffle: true, prompt: 'What is the audio talking about?', rec: 'Listening Q2. What is the audio talking about?',
+        options: [{ t: 'How Gen Alpha uses technology and balances it with real life.', v: 'a' }, { t: 'The history of old computers and typewriters.', v: 'b' }, { t: 'How to cook a healthy meal at home.', v: 'c' }], answer: 'a', key: 'How Gen Alpha uses technology and balances it with real life.' },
+      TF(1, 'Gen Alpha can read before they use technology.', 'F'),
+      TF(2, 'Parents are trying to limit screen time.', 'T'),
+      TF(3, 'The speaker believes that all screen time is bad for Gen Alpha.', 'F'),
+      TF(4, 'Gen Alpha are slow learners and they aren’t adaptive.', 'F'),
+      TF(5, 'Gen Alpha is also learning to balance online activities with real-life connections.', 'T'),
+      FILL(1, 'Leila tries hard to', 'her work with her personal life.', 'balance'),
+      FILL(2, 'You should', 'your screen time. It’s good for you.', 'limit'),
+      FILL(3, 'Some', 'express our feelings.', 'emojis')
+    ];
+    StarPanel.init(QS.length);
+
+    Stage.onChange = (i) => { $('starPanel').classList.toggle('hidden', i !== 2); };
+    Stage.init(3);
+
+    // ---- المرحلة 1 -> 2
+    function goListening() {
+      const a = $('d1').value.trim(), b = $('d2').value.trim();
+      if (a.length < 2 || b.length < 2) { $('warn1').classList.remove('hidden'); playAudio('wrong'); return; }
+      GA.answer('l2-1', 'd1', 'Before you start 1. How much screen time do you usually have each day?', a, null);
+      GA.answer('l2-1', 'd2', 'Before you start 2. What kind of content do you watch or listen to?', b, null);
+      playAudio('click'); Stage.go(1);
+    }
+
+    // ---- الصوت: ملف audio/lesson2-listening.mp3 لو موجود، وإلا قراءة النص بصوت المتصفح (جملة جملة)
+    let playing = false, listened = false, player = null, mode = '', runId = 0;
+    function setUI(on) { $('playIcon').textContent = on ? '⏹' : '▶'; $('playTxt').textContent = on ? 'Stop' : (listened ? 'Listen again' : 'Play the audio'); $('playBtn').classList.toggle('pulse-btn', !on && !listened); }
+    function mark(i) { document.querySelectorAll('.sent').forEach((s, k) => s.classList.toggle('on', k === i)); }
+    function bar(p) { $('lisBar').style.width = Math.round(p * 100) + '%'; }
+    function stopAll() { runId++; playing = false; try { if (player) { player.pause(); player.currentTime = 0; } } catch (e) {} try { speechSynthesis.cancel(); } catch (e) {} mark(-1); setUI(false); }
+    function speakFrom(i, id) {
+      if (!playing || id !== runId) return;
+      if (i >= SENTS.length) { finishListening(false); return; }
+      mark(i); bar(i / SENTS.length); $('lisStatus').textContent = '🎧 جاري الاستماع… ' + (i + 1) + ' / ' + SENTS.length;
+      const u = new SpeechSynthesisUtterance(SENTS[i]); u.lang = 'en-US'; u.rate = 0.9;
+      u.onend = () => speakFrom(i + 1, id);
+      u.onerror = (e) => { if (!playing || id !== runId || e.error === 'interrupted' || e.error === 'canceled') return; stopAll(); $('lisStatus').textContent = 'تعذّر تشغيل الصوت على هذا المتصفح — اقرأ القطعة ثم اضغط الزر بالأسفل.'; $('manualBtn').classList.remove('hidden'); };
+      speechSynthesis.speak(u);
+    }
+    function startTTS() {
+      mode = 'tts';
+      if (!('speechSynthesis' in window)) { $('lisStatus').textContent = 'المتصفح لا يدعم التشغيل الصوتي — اقرأ القطعة ثم اضغط الزر بالأسفل.'; $('manualBtn').classList.remove('hidden'); playing = false; setUI(false); return; }
+      speechSynthesis.cancel(); runId++; playing = true; setUI(true); speakFrom(0, runId);
+    }
+    function togglePlay() {
+      if (playing) { stopAll(); $('lisStatus').textContent = 'اتوقف — لازم تسمع القطعة كاملة عشان تبدأ الأسئلة.'; bar(0); return; }
+      playAudio('click');
+      if (mode === 'tts') { startTTS(); return; }
+      player = new Audio('./audio/l2.mp3'); let failed = false;
+      const fail = () => { if (!failed) { failed = true; console.warn('audio/l2.mp3 not found or unplayable — using browser voice'); $('lisStatus').textContent = '⚠️ ملف الصوت audio/l2.mp3 غير موجود — تم استخدام قراءة المتصفح'; startTTS(); } };
+      player.addEventListener('error', fail); const myId = ++runId; player.addEventListener('ended', () => { if (myId === runId) finishListening(false); });
+      player.addEventListener('timeupdate', () => { if (player.duration) bar(player.currentTime / player.duration); });
+      mode = 'file'; playing = true; setUI(true); $('lisStatus').textContent = '🎧 جاري الاستماع…'; $('manualBtn').classList.add('hidden');
+      player.play().catch(fail);
+    }
+    function finishListening(manual) {
+      const was = playing; playing = false; listened = true; mark(-1); bar(1); setUI(false);
+      if (Stage.cur !== 1) return;                       // لو بتسمع تاني من شاشة الأسئلة
+      $('manualBtn').classList.add('hidden');
+      $('lisStatus').innerHTML = '<span class="text-lime">✅ ممتاز! سمعت القطعة كاملة — يلا نبدأ الأسئلة!</span>'; playAudio('fanfare');
+      GA.setExtra('l2-1', 'listened', true);
+      setTimeout(() => { if (Stage.cur === 1) { Stage.go(2); } }, 1700);
+    }
+    function listenAgain() {
+      if (playing) { stopAll(); return; }
+      mode === 'tts' ? startTTS() : togglePlay();
+      $('againBtn').textContent = '⏹ إيقاف';
+      const t = setInterval(() => { if (!playing) { $('againBtn').textContent = '🎧 اسمع القطعة تاني'; clearInterval(t); } }, 500);
+    }
+    window.addEventListener('pagehide', stopAll);
+
+    Runner({ el: 'qRun', pid: 'l2-1', qs: QS, finishLabel: 'إنهاء الاستماع 🎉', onStar: () => StarPanel.add(),
+      onDone: () => { stopAll(); GA.done('l2-1', { got: StarPanel.got, max: QS.length }); $('doneL1_stars').textContent = StarPanel.got + ' / ' + QS.length + ' ⭐'; playAudio('fanfare'); showModal('doneL1'); } });
+
+  </script>
+</body>
+</html>

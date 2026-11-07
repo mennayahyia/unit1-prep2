@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="h-full">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>فهرس الدروس | مغامرة جيل ألفا</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts: Cairo, Kufam, Silkscreen, Space Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;900&family=Kufam:wght@700;800;900&family=Silkscreen:wght@400;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cream: '#FAF7F2',
+            navy: '#0E1726',
+            orange: '#FF5226',
+            cyan: '#00E5FF',
+            yellow: '#FFE800',
+            lime: '#10B981',
+          },
+          fontFamily: {
+            arabic: ['Kufam', 'Cairo', 'sans-serif'],
+            cairo: ['Cairo', 'sans-serif'],
+            pixel: ['Silkscreen', 'monospace'],
+            mono: ['Space Mono', 'monospace'],
+          },
+          boxShadow: {
+            'brutal-sm': '2px 2px 0px #0E1726',
+            'brutal': '4px 4px 0px #0E1726',
+            'brutal-lg': '6px 6px 0px #0E1726',
+            'brutal-orange': '4px 4px 0px #FF5226',
+            'brutal-cyan': '4px 4px 0px #00E5FF',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #FAF7F2;
+      color: #0E1726;
+      font-family: 'Cairo', sans-serif;
+      overflow-x: hidden;
+      background-image: radial-gradient(#0E1726 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+
+    .btn-brutal {
+      transition: all 0.1s ease-in-out;
+    }
+    .btn-brutal:active {
+      transform: translate(3px, 3px);
+      box-shadow: 1px 1px 0px #0E1726 !important;
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0E1726;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #00E5FF;
+    }
+  </style>
+  <script src="app.js"></script>
+</head>
+<body data-ga-bar="off" class="min-h-screen flex flex-col items-center gap-4 p-4 sm:p-6 selection:bg-orange selection:text-cream">
+  <header class="w-full max-w-xl flex justify-between items-center bg-white border-2 sm:border-3 border-navy p-2.5 sm:p-3 shadow-brutal z-20">
+    <div class="flex items-center gap-2.5">
+      <div id="userAvatarContainer" class="relative group cursor-pointer">
+        <div id="avatarCircle" class="w-8 h-8 sm:w-9 sm:h-9 bg-yellow border-2 border-navy rounded-full flex items-center justify-center font-black text-xs sm:text-sm shadow-brutal-sm text-navy uppercase">👤</div>
+        <span id="userRoleBadge" class="hidden absolute -bottom-1 -right-1 bg-cyan text-navy border border-navy text-[8px] font-mono px-1 font-bold">STD</span>
+      </div>
+      <div class="flex flex-col">
+        <span class="font-pixel text-[9px] sm:text-[11px] tracking-wider text-navy font-bold uppercase" dir="ltr">ENGLISH • PREP 2</span>
+        <span id="headerUserName" class="font-arabic text-[11px] font-bold text-orange truncate max-w-[100px] sm:max-w-[140px]">زائر</span>
+      </div>
+    </div>
+    <div class="flex items-center gap-2 sm:gap-3" dir="ltr">
+      <div id="clock" class="font-pixel text-[10px] sm:text-xs text-navy bg-cream px-2 py-0.5 border border-navy font-bold">00:00:00</div>
+      <a href="stats.html" class="btn-brutal px-2 py-1 bg-yellow border border-navy shadow-brutal-sm text-navy font-arabic font-black text-[11px] sm:text-xs hover:bg-cyan" title="إحصائياتي">📊 <span class="hidden sm:inline">إحصائياتي</span></a>
+    </div>
+  </header>
+
+  <main class="w-full max-w-xl flex-1 flex flex-col gap-5 py-2">
+    <section class="w-full text-center flex flex-col items-center gap-2">
+      <div class="inline-flex items-center gap-1.5 bg-cyan text-navy border-2 border-navy px-3.5 py-1 shadow-brutal-sm font-mono text-xs sm:text-sm font-bold rotate-[-1deg]" dir="ltr">
+        <span>⚡ Unit 1: Gen Alpha & Digital Life</span>
+      </div>
+      <h1 class="font-arabic text-4xl sm:text-5xl font-black text-navy mt-1">فهرس الدروس</h1>
+      <div class="bg-yellow border-2 border-navy px-4 py-1 text-navy font-bold text-sm shadow-brutal-sm rotate-[1deg] inline-block">اختر درسك وكمّل المغامرة 🚀</div>
+    </section>
+
+    <div id="lockToast" class="hidden bg-orange/20 border-2 border-orange text-orange font-bold font-cairo text-xs sm:text-sm p-3 text-center"></div>
+
+    <section class="w-full bg-white border-3 border-navy shadow-brutal p-4 flex flex-col gap-2">
+      <div class="flex justify-between items-center text-xs font-bold">
+        <span class="font-arabic text-navy">تقدمك في الوحدة</span>
+        <span id="totalPct" class="font-pixel text-orange" dir="ltr">0%</span>
+      </div>
+      <div class="w-full h-4 bg-cream border-2 border-navy"><div id="totalBar" class="h-full bg-lime" style="width:0%"></div></div>
+      <div id="totalTxt" class="font-mono text-[11px] text-gray-600 font-bold" dir="ltr"></div>
+    </section>
+
+    <section id="lessons" class="w-full flex flex-col gap-5"></section>
+  </main>
+
+  <footer class="w-full max-w-xl text-center pt-3 pb-1 text-[11px] sm:text-xs font-mono text-gray-600 flex justify-between items-center border-t border-gray-300" dir="ltr">
+    <span>PREP 2 • UNIT 1 DIGI-QUEST</span>
+    <span class="font-bold text-navy">مغامرة جيل ألفا © 2026</span>
+  </footer>
+
+  <script>
+    function updateClock(){const n=new Date(),p=v=>String(v).padStart(2,'0');const c=document.getElementById('clock');if(c)c.textContent=p(n.getHours())+':'+p(n.getMinutes())+':'+p(n.getSeconds());}
+    setInterval(updateClock,1000);updateClock();
+    GA.fillHeader();
+    const sess = GA.session();
+    const isTeacher = sess && sess.role === 'teacher';
+    const rec = (isTeacher ? null : GA.me()) || { pages: {} };
+    const COLORS = ['#FF5226', '#00E5FF', '#FFE800', '#10B981', '#FF5226'];
+    const SYM = { done: '✅', progress: '🟡', skipped: '⏭️', new: '⚪' };
+    const esc = GA.esc;
+
+    function lessonCard(L, li) {
+      const open = GA.unlocked(rec, li), cnt = GA.lessonCount(rec, li), tot = L.pages.length, full = cnt === tot;
+      const col = COLORS[li % COLORS.length];
+      const prevL = li > 0 ? GA.LESSONS[li - 1] : null;
+      const rp = GA.resumePage(rec, li);
+      const btnTxt = full ? 'راجع الدرس ↻' : (cnt === 0 && !L.pages.some(p => rec.pages[p.id] && rec.pages[p.id].visits) ? 'ابدأ الدرس ▶' : 'كمّل الدرس ▶');
+      const segs = L.pages.map(p => {
+        const st = GA.status(rec, p.id);
+        const bg = st === 'done' ? '#10B981' : st === 'progress' ? '#FFE800' : st === 'skipped' ? '#FF5226' : '#E2E8F0';
+        return `<span style="flex:1;height:10px;background:${bg};border:1.5px solid #0E1726"></span>`;
+      }).join('');
+      const list = L.pages.map((p, i) => {
+        const st = GA.status(rec, p.id);
+        const inner = `<span class="text-base">${open ? SYM[st] : '🔒'}</span><span class="flex-1 min-w-0"><b class="block font-arabic text-[13px] leading-tight">${esc(p.ar)}</b><span class="block font-mono text-[10px] text-gray-500" dir="ltr">${esc(p.en)}</span></span>`;
+        return open
+          ? `<a href="${p.file}" class="flex items-center gap-2 p-2 border-t border-navy hover:bg-yellow/30 text-navy no-underline">${inner}<span class="font-mono text-xs">←</span></a>`
+          : `<div class="flex items-center gap-2 p-2 border-t border-navy text-gray-400">${inner}</div>`;
+      }).join('');
+      return `
+      <article class="relative w-full bg-white border-3 border-navy shadow-brutal-lg ${open ? '' : 'opacity-70'}">
+        <div class="absolute -top-3 right-4 border-2 border-navy px-3 py-0.5 font-pixel text-xs font-bold shadow-brutal-sm rotate-[-2deg]" style="background:${open ? col : '#94A3B8'};color:${col === '#FFE800' ? '#0E1726' : '#fff'}" dir="ltr">LESSON ${L.n}</div>
+        <div class="p-4 pt-6 flex flex-col gap-3">
+          <div class="flex items-start gap-3">
+            <div class="w-12 h-12 shrink-0 border-2 border-navy flex items-center justify-center text-2xl shadow-brutal-sm" style="background:${open ? col : '#CBD5E1'}">${open ? L.icon : '🔒'}</div>
+            <div class="min-w-0 flex-1">
+              <h2 class="font-arabic font-black text-lg sm:text-xl text-navy leading-snug">${esc(L.ar)}</h2>
+              <div class="font-mono text-xs font-bold text-gray-600" dir="ltr">${esc(L.en)}</div>
+            </div>
+            <div class="font-pixel text-[11px] text-navy font-bold bg-cream border border-navy px-2 py-0.5" dir="ltr">${cnt}/${tot}</div>
+          </div>
+          <div class="flex gap-1" dir="ltr">${segs}</div>
+          ${open
+            ? `<a href="${rp.file}" class="btn-brutal w-full py-3 text-center no-underline ${full ? 'bg-cyan text-navy' : 'bg-orange text-white'} font-arabic font-black text-base border-2 border-navy shadow-brutal hover:bg-yellow hover:text-navy">${btnTxt}</a>`
+            : `<div class="w-full py-3 text-center bg-gray-200 text-gray-500 font-arabic font-black text-sm border-2 border-navy">🔒 خلّص الدرس ${prevL.n} (${esc(prevL.ar)}) الأول عشان يتفتح</div>`}
+          <details class="border-2 border-navy bg-cream">
+            <summary class="cursor-pointer p-2 font-arabic font-bold text-xs text-navy select-none">📄 صفحات الدرس (${tot})</summary>
+            <div>${list}</div>
+          </details>
+        </div>
+      </article>`;
+    }
+
+    const parts = GA.LESSONS.map((L, li) => lessonCard(L, li));
+    document.getElementById('lessons').innerHTML = parts.join('');
+
+    const pr = GA.progress(rec);
+    document.getElementById('totalPct').textContent = pr.pct + '%';
+    document.getElementById('totalBar').style.width = pr.pct + '%';
+    document.getElementById('totalTxt').textContent = pr.done + ' / ' + pr.total + ' PAGES COMPLETED';
+
+    const lk = new URLSearchParams(location.search).get('locked');
+    if (lk) {
+      const t = document.getElementById('lockToast');
+      t.textContent = '🔒 الدرس ' + lk + ' لسه مقفول — لازم تخلّص الدرس اللي قبله الأول!';
+      t.classList.remove('hidden');
+    }
+  </script>
+</body>
+</html>

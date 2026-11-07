@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="h-full">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>مغامرة جيل ألفا | Unit 1: Gen Alpha & Digital Life</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts: Cairo, Kufam, Silkscreen, Space Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;900&family=Kufam:wght@700;800;900&family=Silkscreen:wght@400;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cream: '#FAF7F2',
+            navy: '#0E1726',
+            orange: '#FF5226',
+            cyan: '#00E5FF',
+            yellow: '#FFE800',
+            lime: '#10B981',
+          },
+          fontFamily: {
+            arabic: ['Kufam', 'Cairo', 'sans-serif'],
+            cairo: ['Cairo', 'sans-serif'],
+            pixel: ['Silkscreen', 'monospace'],
+            mono: ['Space Mono', 'monospace'],
+          },
+          boxShadow: {
+            'brutal-sm': '2px 2px 0px #0E1726',
+            'brutal': '4px 4px 0px #0E1726',
+            'brutal-lg': '6px 6px 0px #0E1726',
+            'brutal-orange': '4px 4px 0px #FF5226',
+            'brutal-cyan': '4px 4px 0px #00E5FF',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Custom CSS Patterns & Aesthetics */
+    body {
+      background-color: #FAF7F2;
+      color: #0E1726;
+      font-family: 'Cairo', sans-serif;
+      overflow-x: hidden;
+      background-image: radial-gradient(#0E1726 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+
+    /* Active button click depth */
+    .btn-brutal {
+      transition: all 0.1s ease-in-out;
+    }
+    .btn-brutal:active {
+      transform: translate(3px, 3px);
+      box-shadow: 1px 1px 0px #0E1726 !important;
+    }
+
+    /* Scrollbar styling */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0E1726;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #00E5FF;
+      border-radius: 0px;
+    }
+  </style>
+  <script src="app.js"></script>
+</head>
+
+<body data-ga-bar="off" class="min-h-screen flex flex-col justify-between items-center p-4 sm:p-6 selection:bg-orange selection:text-cream">
+
+  <!-- TOP DECORATIVE HEADER BAR -->
+  <header class="w-full max-w-xl flex justify-between items-center bg-white border-2 sm:border-3 border-navy p-2.5 sm:p-3 shadow-brutal rounded-none z-20">
+    <!-- Grade & Subject Badge -->
+    <div class="flex items-center gap-2.5">
+      <!-- دائرة الاسم والأفاتار (نفس تصميم صفحة تسجيل الدخول) -->
+      <div id="userAvatarContainer" class="relative group cursor-pointer">
+        <div id="avatarCircle" class="w-8 h-8 sm:w-9 sm:h-9 bg-yellow border-2 border-navy rounded-full flex items-center justify-center font-black text-xs sm:text-sm shadow-brutal-sm text-navy uppercase">
+          👤
+        </div>
+        <span id="userRoleBadge" class="hidden absolute -bottom-1 -right-1 bg-cyan text-navy border border-navy text-[8px] font-mono px-1 font-bold">
+          STD
+        </span>
+      </div>
+      <div class="flex flex-col">
+        <span class="font-pixel text-[9px] sm:text-[11px] tracking-wider text-navy font-bold uppercase" dir="ltr">
+          ENGLISH • PREP 2
+        </span>
+        <span id="headerUserName" class="font-arabic text-[11px] font-bold text-orange truncate max-w-[100px] sm:max-w-[140px]">
+          زائر
+        </span>
+      </div>
+    </div>
+
+    <!-- Right Controls: Audio Toggle & Clock -->
+    <div class="flex items-center gap-2 sm:gap-3" dir="ltr">
+      <div id="clock" class="font-pixel text-[10px] sm:text-xs text-navy bg-cream px-2 py-0.5 border border-navy font-bold">
+        00:00:00
+      </div>
+
+      <button id="soundToggleBtn" onclick="toggleAudio()" class="btn-brutal p-1 sm:p-1.5 bg-yellow border border-navy shadow-brutal-sm hover:bg-cyan text-navy flex items-center justify-center text-xs" title="تفعيل/كتم الصوت">
+        <span id="soundIcon">🔊</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- MAIN LANDING CONTAINER -->
+  <main class="w-full max-w-xl flex-1 flex flex-col justify-center items-center gap-8 py-8 my-auto">
+
+    <!-- TITLE & HEADING SECTION -->
+    <section class="w-full text-center flex flex-col items-center gap-3">
+      
+      <!-- Unit Badge Sticker -->
+      <div class="inline-flex items-center gap-1.5 bg-cyan text-navy border-2 border-navy px-3.5 py-1 shadow-brutal-sm font-mono text-xs sm:text-sm font-bold rotate-[-1deg]" dir="ltr">
+        <span>⚡ Unit 1: Gen Alpha & Digital Life</span>
+      </div>
+
+      <!-- Main Arabic Title with Hard Layer Offset -->
+      <div class="relative mt-2">
+        <!-- Shadow Layer -->
+        <h1 class="font-arabic text-5xl sm:text-7xl font-black text-navy absolute top-1.5 right-1.5 left-0 pointer-events-none select-none opacity-30">
+          مغامرة جيل ألفا
+        </h1>
+        <!-- Front Main Title -->
+        <h1 class="font-arabic text-5xl sm:text-7xl font-black text-navy relative z-10 tracking-tight">
+          مغامرة جيل ألفا
+        </h1>
+      </div>
+
+      <!-- Supporting Line Sticker -->
+      <div class="bg-yellow border-2 border-navy px-4 py-1 text-navy font-bold text-sm sm:text-base shadow-brutal-sm rotate-[1deg] inline-block mt-2">
+        جاهز تكتشف العالم الرقمي؟ 🚀
+      </div>
+    </section>
+
+    <!-- PRIMARY CALL TO ACTION BUTTON -->
+    <section class="w-full pt-2 max-w-md">
+      <button id="startBtn" onclick="launchQuestModal()" class="btn-brutal w-full py-4 sm:py-5 bg-orange text-white font-arabic text-2xl sm:text-3xl font-black border-3 border-navy shadow-brutal-lg hover:bg-yellow hover:text-navy transition-all flex items-center justify-center gap-3 group relative overflow-hidden">
+        <span class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></span>
+        <span class="relative z-10 flex items-center gap-3">
+          <span>ابدأ المغامرة</span>
+          <span class="font-mono text-3xl group-hover:translate-x-[-8px] transition-transform">←</span>
+        </span>
+      </button>
+    </section>
+
+  </main>
+
+  <!-- FOOTER CREDIT BAR -->
+  <footer class="w-full max-w-xl text-center pt-3 pb-1 text-[11px] sm:text-xs font-mono text-gray-600 flex justify-between items-center border-t border-gray-300" dir="ltr">
+    <span>PREP 2 • UNIT 1 DIGI-QUEST</span>
+    <span class="font-bold text-navy">مغامرة جيل ألفا © 2026</span>
+  </footer>
+
+  <!-- DYNAMIC 8-BIT QUEST LAUNCHER MODAL / OVERLAY -->
+<div id="questModal" class="fixed inset-0 bg-navy/80 backdrop-blur-none z-50 hidden flex items-center justify-center p-4">
+   <div class="bg-cream border-3 border-navy shadow-brutal-lg w-full min-h-[500px] max-w-2xl px-6 py-10 sm:px-10 sm:py-12 relative flex flex-col justify-between gap-6">
+      
+      <!-- Modal Header -->
+      <div class="flex justify-between items-center border-b-2 border-navy pb-3">
+        <div class="flex items-center gap-2">
+          <span class="w-3 h-3 bg-orange border border-navy inline-block"></span>
+          <h2 class="font-arabic font-black text-xl text-navy">استعد للمهمة!</h2>
+        </div>
+        <button onclick="closeQuestModal()" class="btn-brutal w-7 h-7 bg-white border-2 border-navy font-pixel text-xs text-navy flex items-center justify-center hover:bg-orange hover:text-white">
+          ✕
+        </button>
+      </div>
+
+<!-- Mission Preview Panel -->
+<div class="bg-navy px-5 pt-3 pb-5 sm:px-8 sm:pt-4 sm:pb-6 border-2 border-navy text-cream space-y-5 sm:space-y-6 w-full min-h-[250px] sm:min-h-[290px] flex flex-col justify-between relative overflow-hidden">
+  <!-- Decorative pixel elements -->
+  <div class="absolute top-0 left-0 w-2 h-2 bg-orange"></div>
+  <div class="absolute bottom-0 right-0 w-3 h-3 bg-cyan"></div>
+
+  <!-- Mission status -->
+  <div class="flex justify-between items-center gap-3 flex-wrap -mt-4" dir="ltr">
+    <span class="font-mono text-[10px] sm:text-xs text-cyan font-bold">
+      MISSION_01
+    </span>
+    <span class="font-mono text-[10px] sm:text-xs text-yellow">
+      PREP_2_ENG
+    </span>
+  </div>
+
+  <!-- Main mission content -->
+  <div class="space-y-3 text-right" dir="rtl">
+
+    <h3 class="font-arabic text-2xl sm:text-4xl font-black text-yellow leading-relaxed">
+      اكتشف جيل ألفا!
+    </h3>
+
+    <p class="font-cairo text-sm sm:text-base text-gray-200 leading-8 max-w-xl">
+      تعرّف على جيل ألفا وعاداته الرقمية، واكتشف كيف يتواصل ويستخدم التكنولوجيا.
+    </p>
+  </div>
+
+  <!-- Unit label -->
+  <div class="border-t border-gray-600 pt-4 flex items-center justify-between gap-3 flex-wrap">
+    <span class="font-mono text-[10px] sm:text-xs text-gray-300" dir="ltr">
+      UNIT 1
+    </span>
+
+    <span class="font-cairo text-xs sm:text-sm text-cyan font-bold">
+      كلمات • تواصل • حياة رقمية
+    </span>
+  </div>
+
+</div>
+
+
+      <!-- Action Buttons in Modal -->
+      <div class="flex gap-2 pt-1">
+        <button onclick="startFullQuest()" class="btn-brutal flex-1 py-3 bg-cyan text-navy font-arabic font-black border-2 border-navy shadow-brutal hover:bg-lime text-base flex items-center justify-center gap-2">
+          <span>الانطلاق للمهمة</span>
+          <span class="font-mono">▶</span>
+        </button>
+        <button onclick="closeQuestModal()" class="btn-brutal px-4 py-3 bg-white text-navy font-arabic font-bold border-2 border-navy shadow-brutal hover:bg-gray-100 text-sm">
+          إلغاء
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT: INTERACTIVITY & PURE WEB AUDIO API SOUND SYNTHESIZER -->
+  <script>
+    // --- WEB AUDIO API SOUND EFFECTS SYNTHESIZER ---
+    let audioCtx = null;
+    let audioMuted = false;
+
+    function initAudio() {
+      if (!audioCtx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        audioCtx = new AudioContext();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    function playAudio(type) {
+      if (audioMuted) return;
+      try {
+        initAudio();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        const now = audioCtx.currentTime;
+
+        if (type === 'blip') {
+          osc.type = 'square';
+          osc.frequency.setValueAtTime(440, now);
+          osc.frequency.exponentialRampToValueAtTime(880, now + 0.08);
+          gain.gain.setValueAtTime(0.1, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+          osc.start(now);
+          osc.stop(now + 0.08);
+        } else if (type === 'launch') {
+          const notes = [261.63, 329.63, 392.00, 523.25];
+          notes.forEach((freq, idx) => {
+            const noteOsc = audioCtx.createOscillator();
+            const noteGain = audioCtx.createGain();
+            noteOsc.type = 'square';
+            noteOsc.frequency.setValueAtTime(freq, now + idx * 0.06);
+            noteGain.gain.setValueAtTime(0.12, now + idx * 0.06);
+            noteGain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.06 + 0.12);
+            noteOsc.connect(noteGain);
+            noteGain.connect(audioCtx.destination);
+            noteOsc.start(now + idx * 0.06);
+            noteOsc.stop(now + idx * 0.06 + 0.12);
+          });
+        } else if (type === 'click') {
+          osc.type = 'square';
+          osc.frequency.setValueAtTime(150, now);
+          gain.gain.setValueAtTime(0.1, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
+          osc.start(now);
+          osc.stop(now + 0.05);
+        }
+      } catch(e) {
+        console.log("Audio not supported or blocked", e);
+      }
+    }
+
+    function toggleAudio() {
+      audioMuted = !audioMuted;
+      const soundIcon = document.getElementById('soundIcon');
+      const soundBtn = document.getElementById('soundToggleBtn');
+      if (audioMuted) {
+        soundIcon.textContent = '🔇';
+        soundBtn.classList.add('opacity-60');
+      } else {
+        soundIcon.textContent = '🔊';
+        soundBtn.classList.remove('opacity-60');
+        playAudio('blip');
+      }
+    }
+
+    // --- REALTIME CLOCK ---
+    function updateClock() {
+      const now = new Date();
+      const hrs = String(now.getHours()).padStart(2, '0');
+      const mins = String(now.getMinutes()).padStart(2, '0');
+      const secs = String(now.getSeconds()).padStart(2, '0');
+      document.getElementById('clock').textContent = `${hrs}:${mins}:${secs}`;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // --- QUEST MODAL LAUNCHER ---
+    function launchQuestModal() {
+      playAudio('launch');
+      document.getElementById('questModal').classList.remove('hidden');
+    }
+
+    function closeQuestModal() {
+      playAudio('click');
+      document.getElementById('questModal').classList.add('hidden');
+    }
+function startFullQuest() {
+  window.location.href = 'contents.html'; // فهرس الدروس
+}
+  </script>
+</body>
+</html>
